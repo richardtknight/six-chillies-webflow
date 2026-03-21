@@ -1,0 +1,17 @@
+# Lint code with ESLint
+echo "🔍 Linting code with ESLint..."
+yarn lint:fix
+
+# Format code with Prettier
+echo "🎨 Formatting code with Prettier..."
+yarn format
+
+# Build production files
+echo "🔨 Building production files..."
+yarn build
+
+# Add linted, formatted and built files to commit
+echo "✅ Adding processed files to commit..."
+git add src/ dist/
+
+echo "✨ Pre-commit checks complete!"

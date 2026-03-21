@@ -1,0 +1,30 @@
+{
+  "name": "webflow-starter",
+  "version": "1.0.1",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "prepare": "husky",
+    "build": "vite build",
+    "format": "prettier --write \"src/**/*.{js,css}\"",
+    "format:check": "prettier --check \"src/**/*.{js,css}\"",
+    "lint": "eslint src/",
+    "lint:fix": "eslint src/ --fix",
+    "prerelease": "yarn lint && yarn format:check && yarn build",
+    "release:patch": "npm version patch -m \"chore: release v%s\" && git push --follow-tags",
+    "release:minor": "npm version minor -m \"chore: release v%s\" && git push --follow-tags",
+    "release:major": "npm version major -m \"chore: release v%s\" && git push --follow-tags"
+  },
+  "dependencies": {
+    "@studio-freight/lenis": "^1.0.42",
+    "gsap": "^3.12.5",
+    "husky": "^9.1.7"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.1.0",
+    "globals": "^17.4.0",
+    "prettier": "^3.8.1",
+    "vite": "^5.0.0"
+  }
+}
