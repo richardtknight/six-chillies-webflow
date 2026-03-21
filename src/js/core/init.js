@@ -13,7 +13,9 @@ export function initApp() {
 
   // Add body classes
   document.body.classList.add('js');
-  document.body.classList.add('animations-ready');
+
+  // Add animations-ready to html element to show content
+  document.documentElement.classList.add('animations-ready');
 
   // Setup video frame if exists
   const videoFrame = document.querySelector('.video-frame');
