@@ -58,22 +58,18 @@ export function splitIntoChars(element) {
       if (/^ +$/.test(token)) {
         const space = document.createElement('span');
         space.className = 'char-space';
-        space.style.cssText = 'display:inline-block;min-width:0.3em;';
         container.appendChild(space);
         return;
       }
 
       const wordWrap = document.createElement('span');
       wordWrap.className = 'char-word';
-      wordWrap.style.cssText = 'display:inline-block;white-space:nowrap;';
 
       for (const ch of token) {
         const outer = document.createElement('span');
         outer.className = 'char';
-        outer.style.cssText = 'display:inline-block;overflow:hidden;vertical-align:top;';
         const inner = document.createElement('span');
         inner.className = 'char-inner';
-        inner.style.display = 'inline-block';
         inner.textContent = ch;
         outer.appendChild(inner);
         wordWrap.appendChild(outer);

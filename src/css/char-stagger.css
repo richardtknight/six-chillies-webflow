@@ -1,0 +1,37 @@
+/* Character Stagger Animation Styles */
+
+/* Parent element should allow normal text wrapping */
+[data-char-stagger] {
+  /* Ensure parent uses normal wrapping */
+  white-space: normal !important;
+}
+
+/* Word wrapper keeps words together but allows wrapping between words */
+.char-word {
+  display: inline-block;
+  white-space: nowrap; /* Keep characters within a word together */
+}
+
+/* Individual character containers */
+.char {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+}
+
+.char-inner {
+  display: inline-block;
+}
+
+/* Space wrapper to control spacing */
+.char-space {
+  display: inline-block;
+  min-width: 0.3em;
+}
+
+/* Ensure line breaks are preserved */
+[data-char-stagger] br {
+  display: block;
+  content: '';
+  margin: 0;
+}
