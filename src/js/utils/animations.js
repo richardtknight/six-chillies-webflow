@@ -108,4 +108,7 @@ export function charStaggerReveal(selector, options = {}) {
         delay: dataDelay,
       });
   });
+
+  // Refresh ScrollTrigger after DOM changes from text splitting
+  ScrollTrigger.refresh();
 }

@@ -22,7 +22,11 @@ export function initContentReveals() {
     stagger: { amount: 0.5, from: 'start' },
     duration: 0.7,
     ease: 'power3.out',
-    scrollTrigger: { trigger: '#logosGrid', start: 'top 82%' },
+    scrollTrigger: {
+      trigger: '#logosGrid',
+      start: 'top 82%',
+      toggleActions: 'play reverse play reverse',
+    },
   });
 
   // Manifesto section
@@ -37,7 +41,11 @@ export function initContentReveals() {
     y: 16,
     duration: 0.8,
     ease: 'power3.out',
-    scrollTrigger: { trigger: '.manifesto-quote', start: 'top 82%' },
+    scrollTrigger: {
+      trigger: '.manifesto-quote',
+      start: 'top 82%',
+      toggleActions: 'play reverse play reverse',
+    },
   });
   gsap.from('.manifesto-body', {
     opacity: 0,
@@ -45,7 +53,11 @@ export function initContentReveals() {
     stagger: 0.1,
     duration: 0.8,
     ease: 'power2.out',
-    scrollTrigger: { trigger: '.manifesto-right', start: 'top 80%' },
+    scrollTrigger: {
+      trigger: '.manifesto-right',
+      start: 'top 80%',
+      toggleActions: 'play reverse play reverse',
+    },
   });
   gsap.from('.manifesto-right .btn-primary', {
     opacity: 0,
@@ -55,6 +67,7 @@ export function initContentReveals() {
     scrollTrigger: {
       trigger: '.manifesto-right .btn-primary',
       start: 'top 88%',
+      toggleActions: 'play reverse play reverse',
     },
   });
 
@@ -71,7 +84,11 @@ export function initContentReveals() {
     stagger: { amount: 0.4, from: 'start' },
     duration: 0.85,
     ease: 'power3.out',
-    scrollTrigger: { trigger: '.testimonials-grid', start: 'top 80%' },
+    scrollTrigger: {
+      trigger: '.testimonials-grid',
+      start: 'top 80%',
+      toggleActions: 'play reverse play reverse',
+    },
   });
   gsap.from('.linkedin-comment', {
     opacity: 0,
@@ -79,7 +96,11 @@ export function initContentReveals() {
     stagger: 0.1,
     duration: 0.7,
     ease: 'power3.out',
-    scrollTrigger: { trigger: '.linkedin-strip', start: 'top 88%' },
+    scrollTrigger: {
+      trigger: '.linkedin-strip',
+      start: 'top 88%',
+      toggleActions: 'play reverse play reverse',
+    },
   });
 
   // CTA section
@@ -93,14 +114,22 @@ export function initContentReveals() {
     y: 16,
     duration: 0.8,
     ease: 'power2.out',
-    scrollTrigger: { trigger: '.cta-sub', start: 'top 82%' },
+    scrollTrigger: {
+      trigger: '.cta-sub',
+      start: 'top 82%',
+      toggleActions: 'play reverse play reverse',
+    },
   });
   gsap.from('.cta-btn', {
     opacity: 0,
     y: 12,
     duration: 0.7,
     ease: 'power2.out',
-    scrollTrigger: { trigger: '.cta-btn', start: 'top 88%' },
+    scrollTrigger: {
+      trigger: '.cta-btn',
+      start: 'top 88%',
+      toggleActions: 'play reverse play reverse',
+    },
   });
   gsap.utils.toArray('.cta-chili').forEach((el, i) => {
     gsap.to(el, {
