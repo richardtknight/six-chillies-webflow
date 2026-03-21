@@ -32,6 +32,7 @@ export function peelReveal(selector, trigger, opts = {}) {
     scrollTrigger: {
       trigger: trigger || selector,
       start: opts.start || 'top 80%',
+      toggleActions: 'play reverse play reverse',
     },
   });
 }
@@ -49,7 +50,11 @@ export function eyebrowReveal(selector, trigger) {
     y: 10,
     duration: 0.6,
     ease: 'power2.out',
-    scrollTrigger: { trigger: trigger || selector, start: 'top 85%' },
+    scrollTrigger: {
+      trigger: trigger || selector,
+      start: 'top 85%',
+      toggleActions: 'play reverse play reverse',
+    },
   });
 }
 
@@ -91,7 +96,7 @@ export function charStaggerReveal(selector, options = {}) {
         scrollTrigger: {
           trigger: el,
           start: cfg.start,
-          toggleActions: 'play none none none',
+          toggleActions: 'play reverse play reverse',
         },
       })
       .to(chars, {
