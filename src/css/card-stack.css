@@ -21,11 +21,12 @@
   position: absolute;
   width: 100%;
   max-width: 350px;
+  height: 500px;
   background: var(--surface, #fff);
   border: 1px solid var(--border, #e0e0e0);
   border-radius: 12px;
-  padding: 2rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
   cursor: grab;
   user-select: none;
   -webkit-user-select: none;
@@ -37,26 +38,58 @@
   cursor: grabbing;
 }
 
+/* Image as full background cover */
 .card-stack-item img {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
-  height: auto;
-  border-radius: 8px;
-  margin-bottom: 1rem;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Gradient overlay for text readability */
+.card-stack-item::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60%;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.4) 50%, transparent);
+  z-index: 1;
   pointer-events: none;
 }
 
+/* Content wrapper */
+.card-stack-content {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  color: white;
+}
+
 .card-stack-item h3 {
-  font-size: 1.5rem;
-  font-weight: 600;
+  font-size: 1.75rem;
+  font-weight: 700;
   margin-bottom: 0.5rem;
-  color: var(--text, #333);
+  color: white;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .card-stack-item p {
   font-size: 1rem;
-  line-height: 1.6;
-  color: var(--muted, #666);
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.9);
   margin: 0;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
 }
 
 /* Card stack actions */

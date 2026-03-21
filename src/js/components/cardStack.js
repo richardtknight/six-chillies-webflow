@@ -34,6 +34,13 @@ export function initCardStack(containerSelector = '.card-stack', options = {}) {
 
     let currentIndex = 0;
 
+    // Generate random offsets for natural stack appearance
+    const cardOffsets = cards.map((_, index) => ({
+      rotation: (Math.random() - 0.5) * 8, // -4 to 4 degrees
+      x: (Math.random() - 0.5) * 20, // -10 to 10 pixels
+      y: Math.random() * 3, // 0 to 3 pixels extra vertical spacing
+    }));
+
     // Position cards in stack
     function positionCards() {
       cards.forEach((card, index) => {
@@ -46,12 +53,13 @@ export function initCardStack(containerSelector = '.card-stack', options = {}) {
             display: 'none',
           });
         } else {
-          // Cards in stack
+          // Cards in stack with natural variation
+          const cardOffset = cardOffsets[index];
           gsap.set(card, {
             display: 'block',
-            x: 0,
-            y: offset * config.stackSpacing,
-            rotation: 0,
+            x: isActive ? 0 : cardOffset.x,
+            y: offset * config.stackSpacing + (isActive ? 0 : cardOffset.y),
+            rotation: isActive ? 0 : cardOffset.rotation,
             scale: Math.pow(config.stackScale, offset),
             zIndex: cards.length - offset,
             opacity: 1,
@@ -89,8 +97,13 @@ export function initCardStack(containerSelector = '.card-stack', options = {}) {
       cards.forEach((c, index) => {
         if (index > currentIndex && index <= currentIndex + 2) {
           const offset = index - (currentIndex + 1);
+          const isNowActive = index === currentIndex + 1;
+          const cardOffset = cardOffsets[index];
+
           gsap.to(c, {
-            y: offset * config.stackSpacing,
+            x: isNowActive ? 0 : cardOffset.x,
+            y: offset * config.stackSpacing + (isNowActive ? 0 : cardOffset.y),
+            rotation: isNowActive ? 0 : cardOffset.rotation,
             scale: Math.pow(config.stackScale, offset),
             duration: 0.4,
             ease: 'power2.out',
