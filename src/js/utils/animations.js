@@ -75,6 +75,8 @@ export function charStaggerReveal(selector, options = {}) {
   const cfg = Object.assign({}, defaults, options);
   const elements = typeof selector === 'string' ? document.querySelectorAll(selector) : [selector];
 
+  console.log('charStaggerReveal: Found', elements.length, 'elements for selector:', selector);
+
   elements.forEach((el) => {
     if (!el) return;
     const dataStagger = parseFloat(el.dataset.stagger) || cfg.stagger;
@@ -87,11 +89,16 @@ export function charStaggerReveal(selector, options = {}) {
     }
 
     const chars = splitIntoChars(el);
-    if (!chars.length) return;
+    if (!chars.length) {
+      console.warn('charStaggerReveal: No chars created for element:', el);
+      return;
+    }
+
+    console.log('charStaggerReveal: Created', chars.length, 'chars for element');
 
     gsap.set(chars, dataFrom);
 
-    gsap
+    const tl = gsap
       .timeline({
         scrollTrigger: {
           trigger: el,
@@ -107,8 +114,7 @@ export function charStaggerReveal(selector, options = {}) {
         ease: cfg.ease,
         delay: dataDelay,
       });
-  });
 
-  // Refresh ScrollTrigger after DOM changes from text splitting
-  ScrollTrigger.refresh();
+    console.log('charStaggerReveal: Animation created with ScrollTrigger:', tl.scrollTrigger);
+  });
 }

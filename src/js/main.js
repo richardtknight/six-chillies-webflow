@@ -8,6 +8,7 @@ import { initPageTransitions } from './features/pageTransitions';
 import { initHamburger } from './components/hamburger';
 import { initCursor } from './components/cursor';
 import { initNav } from './components/nav';
+import { initCardStack } from './components/cardStack';
 
 import { initHero } from './sections/hero';
 import { initHorizontalScroll } from './sections/horizontalScroll';
@@ -45,5 +46,8 @@ window.Webflow.push(() => {
     initTestimonials();
     initContentReveals();
     initMarquee();
+
+    // Optional: Card Stack (call only if you have .card-stack elements)
+    initCardStack('.card-stack', { swipeThreshold: 100 });
   });
 });

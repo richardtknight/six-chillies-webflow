@@ -14,6 +14,15 @@ export function initContentReveals() {
   splitIntoLines(document.querySelector('.t-title'));
   splitIntoLines(document.querySelector('.cta-big'));
 
+  // Character stagger reveal (data-attribute driven) - must be called before other animations
+  charStaggerReveal('[data-char-stagger]');
+
+  // Small delay to ensure DOM has settled after text splitting, then refresh ScrollTrigger
+  requestAnimationFrame(() => {
+    ScrollTrigger.refresh();
+    console.log('ScrollTrigger refreshed. Total triggers:', ScrollTrigger.getAll().length);
+  });
+
   // Logos section
   eyebrowReveal('.logos-section .section-label', '.logos-section');
   gsap.from('.logo-cell', {
@@ -141,7 +150,4 @@ export function initContentReveals() {
       delay: i * 0.5,
     });
   });
-
-  // Character stagger reveal (data-attribute driven)
-  charStaggerReveal('[data-char-stagger]');
 }

@@ -1,5 +1,6 @@
 @import './char-stagger.css';
 @import './marquee.css';
+@import './card-stack.css';
 
 html:not(.animations-ready) * {
   visibility: hidden;
