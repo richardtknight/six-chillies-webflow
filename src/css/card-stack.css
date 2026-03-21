@@ -21,9 +21,8 @@
   position: absolute;
   width: 100%;
   max-width: 350px;
-  height: 500px;
-  background: var(--surface, #fff);
-  border: 1px solid var(--border, #e0e0e0);
+  height: 450px;
+  border: 12px solid #ffffff;
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
@@ -32,6 +31,13 @@
   -webkit-user-select: none;
   touch-action: none;
   will-change: transform, opacity;
+  padding: 1rem;
+  aspect-ratio: 4 / 5;
+  font-family: var(--instrument-sans, sans-serif);
+  font-weight: 400;
+  color: var(--chilli-black);
+  background-color: var(--chilli-red);
+  box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.2);
 }
 
 .card-stack-item:active {
@@ -77,19 +83,23 @@
 }
 
 .card-stack-item h3 {
-  font-size: 1.75rem;
+  font-family: var(--bebas-neue, sans-serif);
+  font-size: 4rem;
   font-weight: 700;
   margin-bottom: 0.5rem;
-  color: white;
+  color: var(--off-white);
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  line-height: 30px;
 }
 
 .card-stack-item p {
-  font-size: 1rem;
-  line-height: 1.5;
-  color: rgba(255, 255, 255, 0.9);
+  font-family: var(--instrument-sans, sans-serif);
+  font-size: 0.9rem;
+  line-height: 1.3;
+  color: var(--off-white);
   margin: 0;
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  text-wrap: balance;
 }
 
 /* Card stack actions */
