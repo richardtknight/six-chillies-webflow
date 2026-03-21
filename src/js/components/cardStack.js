@@ -9,8 +9,8 @@ import gsap from 'gsap';
 export function initCardStack(containerSelector = '.card-stack', options = {}) {
   const defaults = {
     swipeThreshold: 100, // Minimum distance to trigger swipe
-    rotationMultiplier: 0.1, // Card rotation during drag
-    stackSpacing: 8, // Vertical spacing between stacked cards
+    rotationMultiplier: 0.25, // Card rotation during drag
+    stackSpacing: 12, // Vertical spacing between stacked cards
     stackScale: 0.95, // Scale reduction for cards in stack
     onSwipeLeft: null, // Callback when card swiped left
     onSwipeRight: null, // Callback when card swiped right
@@ -78,7 +78,7 @@ export function initCardStack(containerSelector = '.card-stack', options = {}) {
       gsap.to(card, {
         x: exitX,
         rotation: exitRotation,
-        opacity: 0,
+        opacity: 1,
         duration: 0.4,
         ease: 'power2.in',
         onComplete: () => {
@@ -154,14 +154,14 @@ export function initCardStack(containerSelector = '.card-stack', options = {}) {
         const rotation = currentX * config.rotationMultiplier;
 
         // Fade card based on distance
-        const dragDistance = Math.abs(currentX);
-        const opacity = Math.max(0.3, 1 - dragDistance / 300);
+        //const dragDistance = Math.abs(currentX);
+        //const opacity = Math.max(0.3, 1 - dragDistance / 300);
 
         gsap.set(card, {
           x: currentX,
           y: currentY,
           rotation,
-          opacity,
+          //opacity,
         });
 
         e.preventDefault();
