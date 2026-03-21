@@ -1,0 +1,61 @@
+/* Marquee Section Styles */
+
+.marquee-section {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.marquee-container {
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.marquee-logos {
+  position: relative;
+  width: 100%;
+}
+
+.marquee-wrap {
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: fit-content;
+}
+
+.marquee-logo {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex-shrink: 0;
+  will-change: transform;
+}
+
+.marquee-logo img {
+  height: auto;
+  max-height: 60px;
+  width: auto;
+  flex-shrink: 0;
+}
+
+/* Gradient overlays for smooth fade at edges */
+.marquee-left-overlay,
+.marquee-right-overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.marquee-left-overlay {
+  left: 0;
+  background: linear-gradient(to right, var(--off-white), transparent);
+}
+
+.marquee-right-overlay {
+  right: 0;
+  background: linear-gradient(to left, var(--off-white), transparent);
+}

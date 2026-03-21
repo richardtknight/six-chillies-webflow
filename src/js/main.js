@@ -14,6 +14,7 @@ import { initHorizontalScroll } from './sections/horizontalScroll';
 import { initBlockTransition } from './sections/blockTransition';
 import { initTestimonials } from './sections/testimonials';
 import { initContentReveals } from './sections/contentReveals';
+import { initMarquee } from './sections/marquee';
 
 /**
  * Main application entry point
@@ -43,5 +44,6 @@ window.Webflow.push(() => {
     initBlockTransition();
     initTestimonials();
     initContentReveals();
+    initMarquee();
   });
 });

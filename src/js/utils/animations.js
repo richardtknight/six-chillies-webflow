@@ -63,7 +63,7 @@ export function charStaggerReveal(selector, options = {}) {
     stagger: 0.025,
     duration: 0.7,
     ease: 'power3.out',
-    from: { y: '110%' },
+    from: { y: '110%', opacity: 0 },
     delay: 0,
     start: 'top 85%',
   };

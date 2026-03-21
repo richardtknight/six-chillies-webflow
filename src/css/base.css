@@ -1,4 +1,5 @@
 @import './char-stagger.css';
+@import './marquee.css';
 
 html:not(.animations-ready) * {
   visibility: hidden;

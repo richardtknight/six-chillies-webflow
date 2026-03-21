@@ -10,7 +10,7 @@ export function initNav() {
 
   let lastScrollY = 0;
   let navVisible = true;
-  let navLocked = true;
+  let navLocked = false;
 
   window.addEventListener('scroll', () => {
     const current = window.scrollY;
