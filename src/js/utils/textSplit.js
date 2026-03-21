@@ -58,6 +58,7 @@ export function splitIntoChars(element) {
       if (/^ +$/.test(token)) {
         const space = document.createElement('span');
         space.className = 'char-space';
+        space.textContent = ' ';
         container.appendChild(space);
         return;
       }
