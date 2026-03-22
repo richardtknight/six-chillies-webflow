@@ -72,7 +72,7 @@ export function initCardStack(containerSelector = '.card-stack', options = {}) {
     // Animate card out
     function swipeCard(card, direction) {
       const directionMultiplier = direction === 'right' ? 1 : -1;
-      const exitX = window.innerWidth * directionMultiplier;
+      const exitX = window.innerWidth * directionMultiplier + 200; // Move off-screen with some extra margin
       const exitRotation = directionMultiplier * 20;
 
       gsap.to(card, {
