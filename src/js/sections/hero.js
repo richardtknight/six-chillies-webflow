@@ -111,17 +111,17 @@ export function initHero(navControl) {
           boxShadow: `0 ${gsap.utils.interpolate(20, 0, ep)}px ${gsap.utils.interpolate(50, 0, ep)}px rgba(0,0,0,${gsap.utils.interpolate(0.35, 0, ep)})`,
         });
 
-        if (heroTop) {
-          const textProgress = Math.max(
-            0,
-            Math.min(1, (ep - TEXT_EXIT_START) / (TEXT_EXIT_END - TEXT_EXIT_START))
-          );
-          gsap.set(heroTop, {
-            y: TEXT_SLIDE_PX * textProgress,
-            opacity: 1 - textProgress,
-            filter: `blur(${textProgress * 12}px)`,
-          });
-        }
+        // if (heroTop) {
+        //   const textProgress = Math.max(
+        //     0,
+        //     Math.min(1, (ep - TEXT_EXIT_START) / (TEXT_EXIT_END - TEXT_EXIT_START))
+        //   );
+        //   gsap.set(heroTop, {
+        //     y: TEXT_SLIDE_PX * textProgress,
+        //     opacity: 1 - textProgress,
+        //     filter: `blur(${textProgress * 12}px)`,
+        //   });
+        // }
       },
     });
 
