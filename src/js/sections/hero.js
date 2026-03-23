@@ -22,11 +22,11 @@ export function initHero(navControl) {
   const Y_END = 0;
 
   gsap.set(vf, {
-    left: 'calc(0% - 2rem)',
+    left: '80%',
     xPercent: 0,
     x: 0,
     y: Y_START,
-    top: 'calc(0% - 2rem)',
+    top: '-45%',
     scale: 0.15,
     rotation: -4,
     borderRadius: 36,
