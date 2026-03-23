@@ -22,7 +22,7 @@ export function initHero(navControl) {
   const Y_END = 0;
 
   gsap.set(vf, {
-    left: '42%',
+    left: '41%',
     xPercent: 0,
     x: 0,
     y: Y_START,
@@ -103,7 +103,7 @@ export function initHero(navControl) {
 
         gsap.set(vf, {
           scale: gsap.utils.interpolate(0.15, 1, ep),
-          left: `${gsap.utils.interpolate(42, 0, ep)}%`,
+          left: `${gsap.utils.interpolate(41, 0, ep)}%`,
           xPercent: gsap.utils.interpolate(0, 0, ep),
           y: gsap.utils.interpolate(Y_START, Y_END, ep),
           top: `${gsap.utils.interpolate(-25, 'calc(0% - 2rem)', ep)}%`,
