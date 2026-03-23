@@ -27,8 +27,8 @@ export function initHero(navControl) {
   // At 0.15 scale, video is 15% of viewport width
   // Want right edge at 50%, so center should be at 50% - 7.5% = 42.5%
   const startScale = 0.15;
-  const startLeft = '37%';
-  const startTop = '82%';
+  const startLeft = '82%';
+  const startTop = '37%';
 
   // End position - centered in viewport for full screen
   const endLeft = window.innerWidth / 2;
