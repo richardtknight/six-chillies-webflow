@@ -35,8 +35,8 @@ export function initHero(navControl) {
   const endTop = 50;
 
   gsap.set(vf, {
-    left: startLeft,
-    top: startTop,
+    left: `${startLeft}%`,
+    top: `${startTop}%`,
     xPercent: -50,
     yPercent: -50,
     x: 0,
@@ -46,6 +46,7 @@ export function initHero(navControl) {
     borderRadius: 36,
     boxShadow: '0 20px 50px rgba(0,0,0,.35)',
     opacity: 0,
+    zIndex: 2,
   });
 
   gsap.set('#headline .clip-inner', {
