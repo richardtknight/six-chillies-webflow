@@ -27,12 +27,12 @@ export function initHero(navControl) {
   // At 0.15 scale, video is 15% of viewport width
   // Want right edge at 50%, so center should be at 50% - 7.5% = 42.5%
   const startScale = 0.15;
-  const startLeft = '82%';
-  const startTop = '37%';
+  const startLeft = 82;
+  const startTop = 37;
 
   // End position - centered in viewport for full screen
-  const endLeft = window.innerWidth / 2;
-  const endTop = window.innerHeight / 2;
+  const endLeft = 50;
+  const endTop = 50;
 
   gsap.set(vf, {
     left: startLeft,
@@ -116,8 +116,8 @@ export function initHero(navControl) {
 
         gsap.set(vf, {
           scale: gsap.utils.interpolate(0.15, 1, ep),
-          left: gsap.utils.interpolate(startLeft, endLeft, ep),
-          top: gsap.utils.interpolate(startTop, endTop, ep),
+          left: `${gsap.utils.interpolate(startLeft, endLeft, ep)}%`,
+          top: `${gsap.utils.interpolate(startTop, endTop, ep)}%`,
           xPercent: -50,
           yPercent: -50,
           rotation: gsap.utils.interpolate(-4, 0, ep),
