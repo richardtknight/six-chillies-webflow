@@ -27,7 +27,7 @@ export function initHero(navControl) {
   // At 0.15 scale, video is 15% of viewport width
   // Want right edge at 50%, so center should be at 50% - 7.5% = 42.5%
   const startScale = 0.15;
-  const startLeft = window.innerWidth * (0.5 - startScale / 2); // Right edge at 50%
+  const startLeft = window.innerWidth * 0.425; // Right edge at 50%
   const startTop = window.innerHeight * 0.25; // 25% from top
 
   // End position - centered in viewport for full screen
@@ -46,7 +46,7 @@ export function initHero(navControl) {
     borderRadius: 36,
     boxShadow: '0 20px 50px rgba(0,0,0,.35)',
     opacity: 0,
-    zIndex: 1,
+    zIndex: 9998,
   });
 
   gsap.set('#headline .clip-inner', {
@@ -124,20 +124,20 @@ export function initHero(navControl) {
           rotation: gsap.utils.interpolate(-4, 0, ep),
           borderRadius: gsap.utils.interpolate(36, 0, ep),
           boxShadow: `0 ${gsap.utils.interpolate(20, 0, ep)}px ${gsap.utils.interpolate(50, 0, ep)}px rgba(0,0,0,${gsap.utils.interpolate(0.35, 0, ep)})`,
-          zIndex: 9999999,
+          zIndex: 9999,
         });
 
-        // if (heroTop) {
-        //   const textProgress = Math.max(
-        //     0,
-        //     Math.min(1, (ep - TEXT_EXIT_START) / (TEXT_EXIT_END - TEXT_EXIT_START))
-        //   );
-        //   gsap.set(heroTop, {
-        //     y: TEXT_SLIDE_PX * textProgress,
-        //     opacity: 1 - textProgress,
-        //     filter: `blur(${textProgress * 12}px)`,
-        //   });
-        // }
+        if (heroTop) {
+          const textProgress = Math.max(
+            0,
+            Math.min(1, (ep - TEXT_EXIT_START) / (TEXT_EXIT_END - TEXT_EXIT_START))
+          );
+          gsap.set(heroTop, {
+            y: TEXT_SLIDE_PX * textProgress,
+            // opacity: 1 - textProgress,
+            // filter: `blur(${textProgress * 12}px)`,
+          });
+        }
       },
     });
 
