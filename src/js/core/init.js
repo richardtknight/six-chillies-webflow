@@ -17,12 +17,7 @@ export function initApp() {
   // Add animations-ready to html element to show content
   document.documentElement.classList.add('animations-ready');
 
-  // Setup video frame if exists
-  const videoFrame = document.querySelector('.video-frame');
-  if (videoFrame) {
-    videoFrame.style.width = '100vw';
-    videoFrame.style.height = '100vh';
-  }
+  // Video frame will be set up by hero.js
 
   // Destroy existing Webflow instance if present
   if (window.Webflow && window.Webflow.destroy) {

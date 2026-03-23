@@ -18,15 +18,22 @@ export function initHero(navControl) {
 
   if (!vf) return;
 
-  const Y_START = -260;
-  const Y_END = 0;
+  // Set video frame to fixed positioning for scroll animation
+  vf.style.position = 'fixed';
+  vf.style.width = '100vw';
+  vf.style.height = '100vh';
+
+  // Calculate starting position (centered, small scale)
+  const startLeft = window.innerWidth * 0.41; // 41% from left
+  const startTop = window.innerHeight * 0.25; // 25% from top
 
   gsap.set(vf, {
-    left: '41%',
-    xPercent: 0,
+    left: startLeft,
+    top: startTop,
+    xPercent: -50,
+    yPercent: -50,
     x: 0,
-    y: Y_START,
-    top: '-25%',
+    y: 0,
     scale: 0.15,
     rotation: -4,
     borderRadius: 36,
@@ -101,12 +108,16 @@ export function initHero(navControl) {
         const p = animProgress;
         const ep = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
 
+        // Calculate end position (full screen, centered)
+        const endLeft = window.innerWidth / 2;
+        const endTop = window.innerHeight / 2;
+
         gsap.set(vf, {
           scale: gsap.utils.interpolate(0.15, 1, ep),
-          left: `${gsap.utils.interpolate(41, 0, ep)}%`,
-          xPercent: gsap.utils.interpolate(0, 0, ep),
-          y: gsap.utils.interpolate(Y_START, Y_END, ep),
-          top: `${gsap.utils.interpolate(-25, 'calc(0% - 2rem)', ep)}%`,
+          left: gsap.utils.interpolate(startLeft, endLeft, ep),
+          top: gsap.utils.interpolate(startTop, endTop, ep),
+          xPercent: -50,
+          yPercent: -50,
           rotation: gsap.utils.interpolate(-4, 0, ep),
           borderRadius: gsap.utils.interpolate(36, 0, ep),
           boxShadow: `0 ${gsap.utils.interpolate(20, 0, ep)}px ${gsap.utils.interpolate(50, 0, ep)}px rgba(0,0,0,${gsap.utils.interpolate(0.35, 0, ep)})`,
@@ -129,6 +140,11 @@ export function initHero(navControl) {
 
     window.addEventListener('resize', () => {
       heroOuter.style.height = `${window.innerHeight + TOTAL_TRAVEL}px`;
+
+      // Recalculate video frame size and position on resize
+      vf.style.width = '100vw';
+      vf.style.height = '100vh';
+
       ScrollTrigger.refresh();
     });
   }
