@@ -211,6 +211,15 @@ export function initHero(navControl) {
           filter: `blur(${textProgress * 12}px)`,
         });
       }
+
+      // Manage video z-index based on text fade progress
+      // Keep video sandwiched until text is completely gone + small buffer
+      const Z_CHANGE_THRESHOLD = 1.1; // Change z-index slightly after text fully fades
+      if (textProgress < Z_CHANGE_THRESHOLD) {
+        gsap.set(vf, { zIndex: 1 }); // Sandwiched
+      } else {
+        gsap.set(vf, { zIndex: 3 }); // On top
+      }
     }
 
     // Update text on scroll with throttling
