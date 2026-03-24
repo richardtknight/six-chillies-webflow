@@ -70,44 +70,63 @@ export function imageZoomReveal(selector, trigger, opts = {}) {
   const images = document.querySelectorAll(selector);
   if (!images.length) return;
 
+  console.log('imageZoomReveal: Found', images.length, 'images for selector:', selector);
+
   images.forEach((img) => {
     // Ensure the image wrapper has overflow hidden to prevent zoomed image from extending beyond bounds
     if (img.parentElement) {
       img.parentElement.style.overflow = 'hidden';
     }
 
+    // Set initial zoomed-in state
+    gsap.set(img, { scale: 1.3 });
+    img.dataset.scrollComplete = 'false';
+
+    console.log('imageZoomReveal: Set up image with initial scale 1.3:', img);
+
+    // Create the scroll-triggered zoom out animation using fromTo for clearer control
     gsap.fromTo(
       img,
+      { scale: 1.3 },
       {
-        scale: 1.3, // Start zoomed in 30%
-      },
-      {
-        scale: 1, // Zoom out to normal size
+        scale: 1,
         duration: opts.duration || 1.2,
         ease: opts.ease || 'power2.out',
         scrollTrigger: {
           trigger: trigger || img,
           start: opts.start || 'top 80%',
           toggleActions: 'play reverse play reverse',
+          onEnter: () => {
+            console.log('imageZoomReveal: ScrollTrigger entered for image:', img);
+          },
+          onUpdate: (self) => {
+            // Track if scroll animation is complete
+            img.dataset.scrollComplete = self.progress >= 0.99 ? 'true' : 'false';
+          },
         },
       }
     );
 
-    // Add hover effect to zoom in
+    // Add hover effect that respects scroll animation
     img.addEventListener('mouseenter', () => {
-      gsap.to(img, {
-        scale: 1.3,
-        duration: 0.6,
-        ease: 'power2.out',
-      });
+      // Only zoom in on hover if scroll animation has completed
+      if (img.dataset.scrollComplete === 'true') {
+        gsap.to(img, {
+          scale: 1.3,
+          duration: 0.6,
+          ease: 'power2.out',
+        });
+      }
     });
 
     img.addEventListener('mouseleave', () => {
-      gsap.to(img, {
-        scale: 1,
-        duration: 0.6,
-        ease: 'power2.out',
-      });
+      if (img.dataset.scrollComplete === 'true') {
+        gsap.to(img, {
+          scale: 1,
+          duration: 0.6,
+          ease: 'power2.out',
+        });
+      }
     });
   });
 }
