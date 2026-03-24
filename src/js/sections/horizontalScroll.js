@@ -36,8 +36,14 @@ export function initHorizontalScroll() {
     return window.innerWidth + (horizTrack ? horizTrack.scrollWidth : 0);
   }
 
+  function getPreOutroDist() {
+    return horizPreOutro ? horizPreOutro.offsetHeight : 0;
+  }
+
   function getTotalExtra() {
-    return INTRO_HOLD + INTRO_FADE + getCardScrollDist() + OUTRO_FADE + OUTRO_HOLD;
+    return (
+      INTRO_HOLD + INTRO_FADE + getCardScrollDist() + getPreOutroDist() + OUTRO_FADE + OUTRO_HOLD
+    );
   }
 
   function updateHorizHeight() {
@@ -59,12 +65,14 @@ export function initHorizontalScroll() {
     invalidateOnRefresh: true,
     onUpdate(self) {
       const cardScrollDist = getCardScrollDist();
+      const preOutroDist = getPreOutroDist();
       const totalExtra = getTotalExtra();
       const scrolled = self.progress * totalExtra;
       const b1 = INTRO_HOLD;
       const b2 = b1 + INTRO_FADE;
       const b3 = b2 + cardScrollDist;
-      const b4 = b3 + OUTRO_FADE;
+      const b4 = b3 + preOutroDist;
+      const b5 = b4 + OUTRO_FADE;
 
       const introOp = scrolled <= b1 ? 1 : scrolled <= b2 ? 1 - (scrolled - b1) / INTRO_FADE : 0;
       if (horizIntro)
@@ -99,14 +107,18 @@ export function initHorizontalScroll() {
         });
       });
 
-      const outroOp = scrolled <= b3 ? 0 : scrolled <= b4 ? (scrolled - b3) / OUTRO_FADE : 1;
+      const preOutroOp =
+        scrolled <= b3 ? 0 : scrolled <= b4 ? (scrolled - b3) / getPreOutroDist() : 1;
 
       if (horizPreOutro) {
         gsap.set(horizPreOutro, {
-          opacity: outroOp,
-          pointerEvents: outroOp > 0.01 ? 'auto' : 'none',
+          opacity: preOutroOp,
+          pointerEvents: preOutroOp > 0.01 ? 'auto' : 'none',
         });
       }
+
+      const outroOp = scrolled <= b4 ? 0 : scrolled <= b5 ? (scrolled - b4) / OUTRO_FADE : 1;
+
       if (horizOutro)
         gsap.set(horizOutro, {
           opacity: outroOp,
