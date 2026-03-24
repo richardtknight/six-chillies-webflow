@@ -14,6 +14,7 @@ export function initHero(navControl) {
   const eyebrow = document.getElementById('eyebrow');
   const vf = document.getElementById('videoFrame');
   const headline = document.getElementById('heading');
+  const heroSticky = document.querySelector('.hero-sticky');
 
   // if (headline) splitIntoLines(headline);
 
@@ -35,6 +36,16 @@ export function initHero(navControl) {
     video.style.objectFit = 'cover';
   }
 
+  // Calculate initial heroSticky margin-left
+  // When margin is auto and max-width is 1272px, the actual margin is (vw - 1272) / 2
+  function getHeroStickyMargin() {
+    if (!heroSticky) return 0;
+    const computedStyle = window.getComputedStyle(heroSticky);
+    const marginLeft = computedStyle.marginLeft;
+    // Convert to pixels if it's not already
+    return parseFloat(marginLeft) || 0;
+  }
+
   // Responsive calculations based on Webflow breakpoints
   function getResponsiveValues() {
     const vw = window.innerWidth;
@@ -54,25 +65,25 @@ export function initHero(navControl) {
       startWidth = 240;
       startTop = 235;
       startLeft = 300;
-      textSlide = -500; // Increased to slide text further up
+      textSlide = -500;
     } else if (isTablet) {
       // Tablet: medium video, centered
       startWidth = 190;
       startTop = 260;
       startLeft = 240;
-      textSlide = -400; // Increased to slide text further up
+      textSlide = -400;
     } else if (isMobileLandscape) {
       // Mobile Landscape: larger video
       startWidth = 225;
       startTop = 215;
       startLeft = 260;
-      textSlide = -350; // Increased to slide text further up
+      textSlide = -350;
     } else if (isMobilePortrait) {
       // Mobile Portrait: largest relative size
       startWidth = 140;
       startTop = 235;
       startLeft = 170;
-      textSlide = -300; // Increased to slide text further up
+      textSlide = -300;
     } else {
       // Fallback for any edge cases
       startWidth = 240;
@@ -118,6 +129,9 @@ export function initHero(navControl) {
     endTop,
     textSlide,
   } = getResponsiveValues();
+
+  // Store initial heroSticky margin-left value
+  let initialHeroStickyMargin = getHeroStickyMargin();
 
   gsap.set(vf, {
     width: startWidth,
@@ -227,6 +241,12 @@ export function initHero(navControl) {
           });
         }
 
+        // Animate heroSticky margin-left from initial value to 0
+        if (heroSticky) {
+          const marginLeft = gsap.utils.interpolate(initialHeroStickyMargin, 0, ep);
+          heroSticky.style.marginLeft = `${marginLeft}px`;
+        }
+
         // Dynamically manage z-index based on scroll progress
         // Keep video sandwiched (z-index: 1) until text has mostly scrolled away
         // Then bring to front (z-index: 3) above span (z-index: 2)
@@ -280,6 +300,9 @@ export function initHero(navControl) {
       endLeft = newValues.endLeft;
       endTop = newValues.endTop;
       textSlide = newValues.textSlide;
+
+      // Recalculate heroSticky margin
+      initialHeroStickyMargin = getHeroStickyMargin();
 
       heroOuter.style.height = `${window.innerHeight + TOTAL_TRAVEL}px`;
       ScrollTrigger.refresh();
