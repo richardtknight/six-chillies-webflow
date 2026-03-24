@@ -1,6 +1,5 @@
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { splitIntoLines } from '../utils/textSplit';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -65,7 +64,7 @@ export function initHero(navControl) {
     if (isDesktop) {
       // Desktop: smaller video, lower position
       startWidth = 240;
-      startTop = 350;
+      startTop = 250;
       startLeft = 300;
       textSlide = -500;
     } else if (isTablet) {
@@ -225,7 +224,7 @@ export function initHero(navControl) {
       if (heroBg) {
         gsap.set(heroBg, {
           y: (textSlide / 2) * textProgress, // Subtle parallax effect
-          opacity: 1 - textProgress * 0.8, // Fade out slightly slower than text
+          opacity: 0.5 - textProgress * 0.8, // Fade out slightly slower than text
           filter: `blur(${textProgress * 8}px)`, // Less blur than text for a softer effect
         });
       }
