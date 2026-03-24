@@ -24,6 +24,8 @@ export function initHero(navControl) {
   vf.style.overflow = 'hidden';
   vf.style.margin = '0';
   vf.style.padding = '0';
+  vf.style.transform = 'none'; // Clear any inherited transforms
+  vf.style.inset = 'auto'; // Reset any inset values
 
   // Ensure video element inside fills the frame
   const video = vf.querySelector('video, .hero-video');
@@ -155,8 +157,8 @@ export function initHero(navControl) {
   const ANIM_TRAVEL = window.innerHeight * 1.2;
   const HOLD_TRAVEL = window.innerHeight * 0.9;
   const TOTAL_TRAVEL = ANIM_TRAVEL + HOLD_TRAVEL;
-  const TEXT_EXIT_START = 0.25;
-  const TEXT_EXIT_END = 0.55;
+  const TEXT_EXIT_START = 0.05; // Start text exit very early
+  const TEXT_EXIT_END = 0.35; // Finish text exit before video expands significantly
 
   if (heroOuter) {
     heroOuter.style.height = `${window.innerHeight + TOTAL_TRAVEL}px`;
@@ -224,12 +226,14 @@ export function initHero(navControl) {
           gsap.set(vf, {
             width: '100vw',
             height: '100vh',
-            left: 0,
-            top: 0,
+            left: '0px',
+            top: '0px',
             rotation: 0,
             borderRadius: 0,
             boxShadow: 'none',
             zIndex: 0,
+            x: 0,
+            y: 0,
             transform: 'none', // Clear any GSAP transforms
           });
         } else {
