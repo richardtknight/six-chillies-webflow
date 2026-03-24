@@ -20,14 +20,14 @@ export function initHero(navControl) {
   if (!vf) return;
 
   // Set video frame to fixed positioning for scroll animation
-  vf.style.position = 'fixed';
+  vf.style.position = 'absolute';
   vf.style.overflow = 'hidden';
 
   // Ensure video element inside fills the frame
   const video = vf.querySelector('video, .hero-video');
   if (video) {
     video.style.width = '100%';
-    video.style.height = '100%';
+    video.style.height = 'auto';
     video.style.objectFit = 'cover';
   }
 
@@ -36,8 +36,8 @@ export function initHero(navControl) {
   const startHeight = 135; // 16:9 aspect ratio (240 * 9/16)
 
   // Position so right edge is at 50% of screen
-  const startLeft = window.innerWidth * 0.5 - startWidth; // Right edge at 50%
-  const startTop = window.innerHeight * 0.25 - startHeight / 2; // 25% from top, centered vertically
+  const startLeft = 400; // Right edge at 50%
+  const startTop = 250; // 25% from top, centered vertically
 
   // End dimensions and position (full screen, centered)
   const endWidth = window.innerWidth;
