@@ -60,7 +60,7 @@ export function initHero(navControl) {
       // Tablet: medium video, centered
       startWidth = 190; // 35% of viewport
       startTop = 260; // 28% from top
-      startLeft = 200; // Right edge at 50%
+      startLeft = 240; // Right edge at 50%
       textSlide = -280;
     } else if (isMobileLandscape) {
       // Mobile Landscape: larger video
@@ -99,7 +99,8 @@ export function initHero(navControl) {
       startWidth,
       startHeight,
       startLeft,
-      startTop: startTopCentered,
+      startTop,
+      //startTop: startTopCentered,
       endWidth,
       endHeight,
       endLeft,
