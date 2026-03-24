@@ -55,8 +55,6 @@ export function initHero(navControl) {
     boxShadow: '0 20px 50px rgba(0,0,0,.35)',
     opacity: 0,
     zIndex: 2,
-    marginLeft: 0,
-    marginRight: 0,
   });
 
   gsap.set('#headline .clip-inner', {
@@ -165,8 +163,6 @@ export function initHero(navControl) {
           borderRadius: gsap.utils.interpolate(6, 0, ep),
           boxShadow: `0 ${gsap.utils.interpolate(20, 0, ep)}px ${gsap.utils.interpolate(50, 0, ep)}px rgba(0,0,0,${gsap.utils.interpolate(0.35, 0, ep)})`,
           zIndex: Math.round(gsap.utils.interpolate(2, 0, ep)),
-          marginLeft: gsap.utils.interpolate(0, '-2rem', ep),
-          marginRight: gsap.utils.interpolate(0, '-2rem', ep),
         });
       },
     });
