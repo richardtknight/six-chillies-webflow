@@ -177,7 +177,6 @@ export function initHero(navControl) {
   const ANIM_TRAVEL = window.innerHeight * 1.2;
   const HOLD_TRAVEL = window.innerHeight * 0.9;
   const TOTAL_TRAVEL = ANIM_TRAVEL + HOLD_TRAVEL;
-  const VIDEO_ZINDEX_THRESHOLD = 0.35; // When to bring video forward (after text is completely gone)
 
   if (heroOuter) {
     heroOuter.style.height = `${window.innerHeight + TOTAL_TRAVEL}px`;
@@ -213,8 +212,8 @@ export function initHero(navControl) {
       }
 
       // Manage video z-index based on text fade progress
-      // Keep video sandwiched until text is completely gone + small buffer
-      const Z_CHANGE_THRESHOLD = 1.1; // Change z-index slightly after text fully fades
+      // Keep video sandwiched until text is completely gone
+      const Z_CHANGE_THRESHOLD = 1.0; // Change z-index when text fully fades
       if (textProgress < Z_CHANGE_THRESHOLD) {
         gsap.set(vf, { zIndex: 1 }); // Sandwiched
       } else {
@@ -270,17 +269,7 @@ export function initHero(navControl) {
           heroSticky.style.marginLeft = `${marginLeft}px`;
         }
 
-        // Dynamically manage z-index based on scroll progress
-        // Keep video sandwiched (z-index: 1) until text has mostly scrolled away
-        // Then bring to front (z-index: 3) above span (z-index: 2)
-        let videoZIndex;
-        if (ep < VIDEO_ZINDEX_THRESHOLD) {
-          videoZIndex = 1; // Sandwiched between heading and span
-        } else {
-          videoZIndex = 3; // On top during animation and when fully expanded
-        }
-
-        // Animate video frame
+        // Animate video frame (z-index now managed by updateTextAnimations)
         // When fully expanded (ep >= 0.99), snap to exact final values to avoid gaps
         if (ep >= 0.99) {
           gsap.set(vf, {
@@ -291,7 +280,6 @@ export function initHero(navControl) {
             rotation: 0,
             borderRadius: 0,
             boxShadow: 'none',
-            zIndex: videoZIndex,
             x: 0,
             y: 0,
             transform: 'none', // Clear any GSAP transforms
@@ -305,7 +293,6 @@ export function initHero(navControl) {
             rotation: gsap.utils.interpolate(-4, 0, ep),
             borderRadius: gsap.utils.interpolate(6, 0, ep),
             boxShadow: `0 ${gsap.utils.interpolate(20, 0, ep)}px ${gsap.utils.interpolate(50, 0, ep)}px rgba(0,0,0,${gsap.utils.interpolate(0.35, 0, ep)})`,
-            zIndex: videoZIndex,
           });
         }
       },
