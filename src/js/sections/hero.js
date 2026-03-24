@@ -15,6 +15,7 @@ export function initHero(navControl) {
   const vf = document.getElementById('videoFrame');
   const headline = document.getElementById('heading');
   const heroSticky = document.querySelector('.hero-sticky');
+  const heroBg = document.getElementById('heroBg');
 
   // if (headline) splitIntoLines(headline);
 
@@ -172,7 +173,7 @@ export function initHero(navControl) {
     )
     .from('#heroSub', { opacity: 0, y: 14, duration: 0.8 }, '-=.5')
     .from('#heroActions', { opacity: 0, y: 12, duration: 0.6 }, '-=.5')
-    .to(vf, { opacity: 1, duration: 0.6 }, '-=.8');
+    .to(vf, { opacity: 1, duration: 0.6 }, '-=.3'); // Reduced offset so video appears after headline finishes
 
   const ANIM_TRAVEL = window.innerHeight * 1.2;
   const HOLD_TRAVEL = window.innerHeight * 0.9;
@@ -210,6 +211,14 @@ export function initHero(navControl) {
           y: textSlide * textProgress,
           opacity: 1 - textProgress,
           filter: `blur(${textProgress * 12}px)`,
+        });
+      }
+
+      if (heroBg) {
+        gsap.set(heroBg, {
+          y: (textSlide / 2) * textProgress, // Subtle parallax effect
+          opacity: 1 - textProgress * 0.8, // Fade out slightly slower than text
+          filter: `blur(${textProgress * 8}px)`, // Less blur than text for a softer effect
         });
       }
 
