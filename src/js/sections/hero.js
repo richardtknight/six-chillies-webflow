@@ -47,37 +47,40 @@ export function initHero(navControl) {
     const isMobilePortrait = vw <= 479; // Mobile Portrait: 479px and below
 
     // Starting dimensions - scale based on Webflow breakpoints
-    let startTop, startLeft, textSlide;
-
-    const startWidth = Math.min(vw * 0.15, 240); // 15% of viewport (max 240px)
-    const startWidthHalf = startWidth / 2;
+    let startWidth, startWidthHalf, startTop, startLeft, textSlide;
 
     if (isDesktop) {
       // Desktop: smaller video, lower position
+      startWidth = Math.min(vw * 0.3, 240); // 30% of viewport (max 240px)
+      startWidthHalf = startWidth / 2;
       startTop = vh * 0.25; // 25% from top
       startLeft = vw * 0.5 - startWidthHalf; // Right edge at 50%
       textSlide = -360;
     } else if (isTablet) {
       // Tablet: medium video, centered
-      // startWidth = vw * 0.35; // 35% of viewport
+      startWidth = vw * 0.35; // 35% of viewport
+      startWidthHalf = startWidth / 2;
       startTop = vh * 0.28; // 28% from top
       startLeft = vw * 0.5 - startWidthHalf; // Right edge at 50%
       textSlide = -280;
     } else if (isMobileLandscape) {
       // Mobile Landscape: larger video
-      //startWidth = vw * 0.5; // 50% of viewport
+      startWidth = vw * 0.5; // 50% of viewport
+      startWidthHalf = startWidth / 2;
       startTop = vh * 0.3; // 30% from top
       startLeft = vw * 0.5 - startWidthHalf; // Right edge at 50%
       textSlide = -220;
     } else if (isMobilePortrait) {
       // Mobile Portrait: largest relative size
-      // startWidth = vw * 0.65; // 65% of viewport
+      startWidth = vw * 0.65; // 65% of viewport
+      startWidthHalf = startWidth / 2;
       startTop = vh * 0.25; // 25% from top
       startLeft = vw * 0.5 - startWidthHalf; // Right edge at 50%
       textSlide = -180;
     } else {
       // Fallback for any edge cases
-      //startWidth = vw * 0.5;
+      startWidth = vw * 0.5;
+      startWidthHalf = startWidth / 2;
       startTop = vh * 0.3;
       startLeft = vw * 0.5 - startWidthHalf; // Right edge at 50%
       textSlide = -200;
