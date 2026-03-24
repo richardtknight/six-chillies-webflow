@@ -41,7 +41,7 @@ export function initHero(navControl) {
     left: startLeft,
     top: startTop,
     rotation: -4,
-    borderRadius: 36,
+    borderRadius: 16,
     boxShadow: '0 20px 50px rgba(0,0,0,.35)',
     opacity: 0,
     zIndex: 2,
@@ -119,8 +119,9 @@ export function initHero(navControl) {
           left: gsap.utils.interpolate(startLeft, endLeft, ep),
           top: gsap.utils.interpolate(startTop, endTop, ep),
           rotation: gsap.utils.interpolate(-4, 0, ep),
-          borderRadius: gsap.utils.interpolate(36, 0, ep),
+          borderRadius: gsap.utils.interpolate(16, 0, ep),
           boxShadow: `0 ${gsap.utils.interpolate(20, 0, ep)}px ${gsap.utils.interpolate(50, 0, ep)}px rgba(0,0,0,${gsap.utils.interpolate(0.35, 0, ep)})`,
+          zIndex: 3,
         });
 
         // if (heroTop) {
