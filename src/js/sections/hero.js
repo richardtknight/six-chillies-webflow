@@ -81,7 +81,7 @@ export function initHero(navControl) {
     } else if (isMobilePortrait) {
       // Mobile Portrait: largest relative size
       startWidth = 140;
-      startTop = 235;
+      startTop = 215;
       startLeft = 170;
       textSlide = -300;
     } else {
@@ -179,7 +179,7 @@ export function initHero(navControl) {
   const TOTAL_TRAVEL = ANIM_TRAVEL + HOLD_TRAVEL;
   const TEXT_EXIT_START = 0.0; // Start text exit immediately
   const TEXT_EXIT_END = 0.3; // Finish text exit quickly
-  const VIDEO_ZINDEX_THRESHOLD = 0.25; // When to bring video forward (after text is mostly gone)
+  const VIDEO_ZINDEX_THRESHOLD = 0.35; // When to bring video forward (after text is completely gone)
 
   if (heroOuter) {
     heroOuter.style.height = `${window.innerHeight + TOTAL_TRAVEL}px`;
