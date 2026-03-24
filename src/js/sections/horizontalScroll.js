@@ -10,6 +10,7 @@ export function initHorizontalScroll() {
   const horizSection = document.getElementById('horizSection');
   const horizTrack = document.getElementById('horizTrack');
   const horizIntro = document.getElementById('horizIntro');
+  const horizPreOutro = document.getElementById('horizPreOutro');
   const horizOutro = document.getElementById('horizOutro');
   const horizDots = document.getElementById('horizDots');
   const CARDS = horizTrack ? horizTrack.querySelectorAll('.hcard') : [];
@@ -99,6 +100,13 @@ export function initHorizontalScroll() {
       });
 
       const outroOp = scrolled <= b3 ? 0 : scrolled <= b4 ? (scrolled - b3) / OUTRO_FADE : 1;
+
+      if (horizPreOutro) {
+        gsap.set(horizPreOutro, {
+          opacity: outroOp,
+          pointerEvents: outroOp > 0.01 ? 'auto' : 'none',
+        });
+      }
       if (horizOutro)
         gsap.set(horizOutro, {
           opacity: outroOp,
