@@ -183,6 +183,8 @@ export function initHero(navControl) {
 
     // Separate scroll handler for text animations that responds to page scroll immediately
     const TEXT_FADE_DISTANCE = window.innerHeight * 0.5; // Distance to fully fade text
+    const Z_CHANGE_DISTANCE = window.innerHeight * 0.55; // Z-index changes slightly after text fades
+
     function updateTextAnimations() {
       const scrollY = window.scrollY || window.pageYOffset;
       const textProgress = Math.min(1, scrollY / TEXT_FADE_DISTANCE);
@@ -211,10 +213,9 @@ export function initHero(navControl) {
         });
       }
 
-      // Manage video z-index based on text fade progress
-      // Keep video sandwiched until text is completely gone
-      const Z_CHANGE_THRESHOLD = 1.0; // Change z-index when text fully fades
-      if (textProgress < Z_CHANGE_THRESHOLD) {
+      // Manage video z-index based on scroll distance (not capped textProgress)
+      // This allows a buffer beyond text fade completion
+      if (scrollY < Z_CHANGE_DISTANCE) {
         gsap.set(vf, { zIndex: 1 }); // Sandwiched
       } else {
         gsap.set(vf, { zIndex: 3 }); // On top
