@@ -1,0 +1,33 @@
+/**
+ * Fade and Slide Reveal Animation
+ *
+ * Apply to any element with data-fade-slide attribute
+ * Elements will fade in and slide up on scroll into view
+ *
+ * Usage:
+ * <div data-fade-slide>Your content</div>
+ *
+ * Customization via data attributes:
+ * data-fade-slide-y="50"          - Distance to slide up from (default: 30)
+ * data-fade-slide-duration="1.5"  - Animation duration in seconds (default: 1.2)
+ * data-fade-slide-delay="0.2"     - Delay before animation starts (default: 0)
+ * data-fade-slide-start="top 80%" - ScrollTrigger start position (default: "top 85%")
+ *
+ * Examples:
+ * <section data-fade-slide>
+ *   Fades in and slides up 30px
+ * </section>
+ *
+ * <div data-fade-slide data-fade-slide-y="50" data-fade-slide-duration="1.5">
+ *   Slides up 50px over 1.5 seconds
+ * </div>
+ *
+ * <button data-fade-slide data-fade-slide-delay="0.3">
+ *   Fades in with 0.3s delay
+ * </button>
+ */
+
+[data-fade-slide] {
+  /* Optional: Add will-change for performance optimization */
+  will-change: transform, opacity;
+}

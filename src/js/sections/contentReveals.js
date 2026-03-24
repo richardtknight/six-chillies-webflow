@@ -1,7 +1,13 @@
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { splitIntoLines } from '../utils/textSplit';
-import { peelReveal, eyebrowReveal, charStaggerReveal, imageZoomReveal } from '../utils/animations';
+import {
+  peelReveal,
+  eyebrowReveal,
+  charStaggerReveal,
+  imageZoomReveal,
+  fadeSlideReveal,
+} from '../utils/animations';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -16,6 +22,9 @@ export function initContentReveals() {
 
   // Character stagger reveal (data-attribute driven) - must be called before other animations
   charStaggerReveal('[data-char-stagger]');
+
+  // Fade and slide reveal (data-attribute driven)
+  fadeSlideReveal('[data-fade-slide]');
 
   // Small delay to ensure DOM has settled after text splitting, then refresh ScrollTrigger
   requestAnimationFrame(() => {

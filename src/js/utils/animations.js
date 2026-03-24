@@ -113,6 +113,48 @@ export function imageZoomReveal(selector, trigger, opts = {}) {
 }
 
 /**
+ * Simple fade-in and slide-up reveal animation
+ * Apply to any element with data-fade-slide attribute
+ * @param {string} selector - CSS selector for elements
+ * @param {Object} options - Animation options
+ */
+export function fadeSlideReveal(selector, options = {}) {
+  const defaults = {
+    y: 30, // Distance to slide up from
+    duration: 1.2,
+    ease: 'power4.out',
+    stagger: 0,
+    start: 'top 85%',
+    delay: 0,
+  };
+  const cfg = Object.assign({}, defaults, options);
+  const elements = document.querySelectorAll(selector);
+
+  if (!elements.length) return;
+
+  elements.forEach((el) => {
+    // Read data attributes for per-element customization
+    const dataY = parseFloat(el.dataset.fadeSlideY) || cfg.y;
+    const dataDuration = parseFloat(el.dataset.fadeSlideDuration) || cfg.duration;
+    const dataDelay = parseFloat(el.dataset.fadeSlideDelay) || cfg.delay;
+    const dataStart = el.dataset.fadeSlideStart || cfg.start;
+
+    gsap.from(el, {
+      opacity: 0,
+      y: dataY,
+      duration: dataDuration,
+      delay: dataDelay,
+      ease: cfg.ease,
+      scrollTrigger: {
+        trigger: el,
+        start: dataStart,
+        toggleActions: 'play reverse play reverse',
+      },
+    });
+  });
+}
+
+/**
  * Character-by-character stagger reveal animation
  * @param {string|HTMLElement} selector - CSS selector or element
  * @param {Object} options - Animation options
