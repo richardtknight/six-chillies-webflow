@@ -20,28 +20,26 @@ export function initHero(navControl) {
 
   // Set video frame to fixed positioning for scroll animation
   vf.style.position = 'fixed';
-  vf.style.width = '100vw';
-  vf.style.height = '100vh';
 
-  // Calculate starting position
-  // At 0.15 scale, video is 15% of viewport width
-  // Want right edge at 50%, so center should be at 50% - 7.5% = 42.5%
-  const startScale = 0.15;
-  const startLeft = 82;
-  const startTop = 37;
+  // Starting dimensions and position
+  const startWidth = 240; // Fixed width in pixels
+  const startHeight = 135; // 16:9 aspect ratio (240 * 9/16)
 
-  // End position - centered in viewport for full screen
-  const endLeft = 50;
-  const endTop = 50;
+  // Position so right edge is at 50% of screen
+  const startLeft = window.innerWidth * 0.5 - startWidth; // Right edge at 50%
+  const startTop = window.innerHeight * 0.25 - startHeight / 2; // 25% from top, centered vertically
+
+  // End dimensions and position (full screen, centered)
+  const endWidth = window.innerWidth;
+  const endHeight = window.innerHeight;
+  const endLeft = 0;
+  const endTop = 0;
 
   gsap.set(vf, {
-    left: `${startLeft}%`,
-    top: `${startTop}%`,
-    xPercent: -50,
-    yPercent: -50,
-    x: 0,
-    y: 0,
-    scale: startScale,
+    width: startWidth,
+    height: startHeight,
+    left: startLeft,
+    top: startTop,
     rotation: -4,
     borderRadius: 36,
     boxShadow: '0 20px 50px rgba(0,0,0,.35)',
@@ -116,11 +114,10 @@ export function initHero(navControl) {
         const ep = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
 
         gsap.set(vf, {
-          scale: gsap.utils.interpolate(0.15, 1, ep),
-          left: `${gsap.utils.interpolate(startLeft, endLeft, ep)}%`,
-          top: `${gsap.utils.interpolate(startTop, endTop, ep)}%`,
-          xPercent: -50,
-          yPercent: -50,
+          width: gsap.utils.interpolate(startWidth, endWidth, ep),
+          height: gsap.utils.interpolate(startHeight, endHeight, ep),
+          left: gsap.utils.interpolate(startLeft, endLeft, ep),
+          top: gsap.utils.interpolate(startTop, endTop, ep),
           rotation: gsap.utils.interpolate(-4, 0, ep),
           borderRadius: gsap.utils.interpolate(36, 0, ep),
           boxShadow: `0 ${gsap.utils.interpolate(20, 0, ep)}px ${gsap.utils.interpolate(50, 0, ep)}px rgba(0,0,0,${gsap.utils.interpolate(0.35, 0, ep)})`,
@@ -142,11 +139,6 @@ export function initHero(navControl) {
 
     window.addEventListener('resize', () => {
       heroOuter.style.height = `${window.innerHeight + TOTAL_TRAVEL}px`;
-
-      // Recalculate video frame size and position on resize
-      vf.style.width = '100vw';
-      vf.style.height = '100vh';
-
       ScrollTrigger.refresh();
     });
   }
