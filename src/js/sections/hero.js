@@ -14,6 +14,7 @@ export function initHero(navControl) {
   const eyebrow = document.getElementById('eyebrow');
   const vf = document.getElementById('videoFrame');
   const headline = document.getElementById('heading');
+  const headlineOverlay = document.getElementById('headingOverlay');
   const heroSticky = document.querySelector('.hero-sticky');
   const heroBg = document.getElementById('heroBg');
 
@@ -64,7 +65,7 @@ export function initHero(navControl) {
     if (isDesktop) {
       // Desktop: smaller video, lower position
       startWidth = 240;
-      startTop = 235;
+      startTop = 350;
       startLeft = 300;
       textSlide = -500;
     } else if (isTablet) {
@@ -143,10 +144,10 @@ export function initHero(navControl) {
     borderRadius: 6,
     boxShadow: '0 20px 50px rgba(0,0,0,.35)',
     opacity: 0,
-    zIndex: 1, // Start sandwiched between heading and span (span is z-index: 2)
+    zIndex: 0, // Start sandwiched between heading and span (span is z-index: 2)
   });
 
-  gsap.set('#headline .clip-inner', {
+  gsap.set('#headline .clip-inner, #headingOverlay .clip-inner', {
     display: 'block',
     y: '105%',
     scaleX: 0.78,
@@ -159,7 +160,7 @@ export function initHero(navControl) {
     .timeline({ defaults: { ease: 'power4.out' }, delay: 0.2 })
     .to('#eyebrow', { opacity: 1, duration: 0.5 })
     .to(
-      '#headline .clip-inner',
+      '#headline .clip-inner, #headingOverlay .clip-inner',
       {
         y: '0%',
         scaleX: 1,
@@ -205,6 +206,13 @@ export function initHero(navControl) {
           filter: `blur(${textProgress * 12}px)`,
         });
       }
+      if (headlineOverlay) {
+        gsap.set(headlineOverlay, {
+          y: textSlide * textProgress,
+          opacity: 1 - textProgress,
+          filter: `blur(${textProgress * 12}px)`,
+        });
+      }
 
       if (eyebrow) {
         gsap.set(eyebrow, {
@@ -225,7 +233,7 @@ export function initHero(navControl) {
       // Manage video z-index based on scroll distance (not capped textProgress)
       // This allows a buffer beyond text fade completion
       if (scrollY < Z_CHANGE_DISTANCE) {
-        gsap.set(vf, { zIndex: 1 }); // Sandwiched
+        gsap.set(vf, { zIndex: 0 }); // Sandwiched
       } else {
         gsap.set(vf, { zIndex: 3 }); // On top
       }
