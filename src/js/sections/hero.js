@@ -177,12 +177,56 @@ export function initHero(navControl) {
   const ANIM_TRAVEL = window.innerHeight * 1.2;
   const HOLD_TRAVEL = window.innerHeight * 0.9;
   const TOTAL_TRAVEL = ANIM_TRAVEL + HOLD_TRAVEL;
-  const TEXT_EXIT_START = 0.0; // Start text exit immediately
-  const TEXT_EXIT_END = 0.3; // Finish text exit quickly
   const VIDEO_ZINDEX_THRESHOLD = 0.35; // When to bring video forward (after text is completely gone)
 
   if (heroOuter) {
     heroOuter.style.height = `${window.innerHeight + TOTAL_TRAVEL}px`;
+
+    // Separate scroll handler for text animations that responds to page scroll immediately
+    const TEXT_FADE_DISTANCE = window.innerHeight * 0.5; // Distance to fully fade text
+    function updateTextAnimations() {
+      const scrollY = window.scrollY || window.pageYOffset;
+      const textProgress = Math.min(1, scrollY / TEXT_FADE_DISTANCE);
+
+      if (heroTopRight) {
+        gsap.set(heroTopRight, {
+          y: textSlide * textProgress,
+          opacity: 1 - textProgress,
+          filter: `blur(${textProgress * 12}px)`,
+        });
+      }
+
+      if (headline) {
+        gsap.set(headline, {
+          y: textSlide * textProgress,
+          opacity: 1 - textProgress,
+          filter: `blur(${textProgress * 12}px)`,
+        });
+      }
+
+      if (eyebrow) {
+        gsap.set(eyebrow, {
+          y: textSlide * textProgress,
+          opacity: 1 - textProgress,
+          filter: `blur(${textProgress * 12}px)`,
+        });
+      }
+    }
+
+    // Update text on scroll with throttling
+    let textTicking = false;
+    window.addEventListener('scroll', () => {
+      if (!textTicking) {
+        window.requestAnimationFrame(() => {
+          updateTextAnimations();
+          textTicking = false;
+        });
+        textTicking = true;
+      }
+    });
+
+    // Initialize text position
+    updateTextAnimations();
 
     ScrollTrigger.create({
       trigger: heroOuter,
@@ -210,36 +254,6 @@ export function initHero(navControl) {
 
         const p = animProgress;
         const ep = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
-
-        // Animate text elements out before video expands
-        const textProgress = Math.max(
-          0,
-          Math.min(1, (ep - TEXT_EXIT_START) / (TEXT_EXIT_END - TEXT_EXIT_START))
-        );
-
-        if (heroTopRight) {
-          gsap.set(heroTopRight, {
-            y: textSlide * textProgress,
-            opacity: 1 - textProgress,
-            filter: `blur(${textProgress * 12}px)`,
-          });
-        }
-
-        if (headline) {
-          gsap.set(headline, {
-            y: textSlide * textProgress,
-            opacity: 1 - textProgress,
-            filter: `blur(${textProgress * 12}px)`,
-          });
-        }
-
-        if (eyebrow) {
-          gsap.set(eyebrow, {
-            y: textSlide * textProgress,
-            opacity: 1 - textProgress,
-            filter: `blur(${textProgress * 12}px)`,
-          });
-        }
 
         // Animate heroSticky margin-left from initial value to 0
         if (heroSticky) {
