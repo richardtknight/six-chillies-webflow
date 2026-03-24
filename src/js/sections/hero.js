@@ -69,8 +69,8 @@ export function initHero(navControl) {
       textSlide = -500;
     } else if (isTablet) {
       // Tablet: medium video, centered
-      startWidth = 190;
-      startTop = 260;
+      startWidth = 170;
+      startTop = 250;
       startLeft = 240;
       textSlide = -400;
     } else if (isMobileLandscape) {

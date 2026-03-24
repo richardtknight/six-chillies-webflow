@@ -1,7 +1,7 @@
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { splitIntoLines } from '../utils/textSplit';
-import { peelReveal, eyebrowReveal, charStaggerReveal } from '../utils/animations';
+import { peelReveal, eyebrowReveal, charStaggerReveal, imageZoomReveal } from '../utils/animations';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -149,5 +149,12 @@ export function initContentReveals() {
       yoyo: true,
       delay: i * 0.5,
     });
+  });
+
+  // Image zoom reveal
+  imageZoomReveal('.zoom-img', null, {
+    duration: 1.4,
+    ease: 'power3.out',
+    start: 'top 80%',
   });
 }
