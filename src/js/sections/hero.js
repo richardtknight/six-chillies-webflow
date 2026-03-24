@@ -13,9 +13,9 @@ export function initHero(navControl) {
   const heroTopRight = document.querySelector('.hero-top-right');
   const eyebrow = document.getElementById('eyebrow');
   const vf = document.getElementById('videoFrame');
-  const headline = document.getElementById('headline');
+  const headline = document.getElementById('heading');
 
-  if (headline) splitIntoLines(headline);
+  // if (headline) splitIntoLines(headline);
 
   if (!vf) return;
 
@@ -91,7 +91,7 @@ export function initHero(navControl) {
   const TOTAL_TRAVEL = ANIM_TRAVEL + HOLD_TRAVEL;
   const TEXT_EXIT_START = 0.25;
   const TEXT_EXIT_END = 0.55;
-  const TEXT_SLIDE_PX = -160;
+  const TEXT_SLIDE_PX = -360;
 
   if (heroOuter) {
     heroOuter.style.height = `${window.innerHeight + TOTAL_TRAVEL}px`;
