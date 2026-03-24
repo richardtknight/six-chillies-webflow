@@ -22,6 +22,8 @@ export function initHero(navControl) {
   // Set video frame to fixed positioning for scroll animation
   vf.style.position = 'fixed';
   vf.style.overflow = 'hidden';
+  vf.style.margin = '0';
+  vf.style.padding = '0';
 
   // Ensure video element inside fills the frame
   const video = vf.querySelector('video, .hero-video');
@@ -217,16 +219,31 @@ export function initHero(navControl) {
         }
 
         // Animate video frame
-        gsap.set(vf, {
-          width: gsap.utils.interpolate(startWidth, endWidth, ep),
-          height: gsap.utils.interpolate(startHeight, endHeight, ep),
-          left: gsap.utils.interpolate(startLeft, endLeft, ep),
-          top: gsap.utils.interpolate(startTop, endTop, ep),
-          rotation: gsap.utils.interpolate(-4, 0, ep),
-          borderRadius: gsap.utils.interpolate(6, 0, ep),
-          boxShadow: `0 ${gsap.utils.interpolate(20, 0, ep)}px ${gsap.utils.interpolate(50, 0, ep)}px rgba(0,0,0,${gsap.utils.interpolate(0.35, 0, ep)})`,
-          zIndex: Math.round(gsap.utils.interpolate(2, 0, ep)),
-        });
+        // When fully expanded (ep >= 0.99), snap to exact final values to avoid gaps
+        if (ep >= 0.99) {
+          gsap.set(vf, {
+            width: '100vw',
+            height: '100vh',
+            left: 0,
+            top: 0,
+            rotation: 0,
+            borderRadius: 0,
+            boxShadow: 'none',
+            zIndex: 0,
+            transform: 'none', // Clear any GSAP transforms
+          });
+        } else {
+          gsap.set(vf, {
+            width: gsap.utils.interpolate(startWidth, endWidth, ep),
+            height: gsap.utils.interpolate(startHeight, endHeight, ep),
+            left: gsap.utils.interpolate(startLeft, endLeft, ep),
+            top: gsap.utils.interpolate(startTop, endTop, ep),
+            rotation: gsap.utils.interpolate(-4, 0, ep),
+            borderRadius: gsap.utils.interpolate(6, 0, ep),
+            boxShadow: `0 ${gsap.utils.interpolate(20, 0, ep)}px ${gsap.utils.interpolate(50, 0, ep)}px rgba(0,0,0,${gsap.utils.interpolate(0.35, 0, ep)})`,
+            zIndex: Math.round(gsap.utils.interpolate(2, 0, ep)),
+          });
+        }
       },
     });
 
