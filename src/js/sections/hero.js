@@ -20,7 +20,7 @@ export function initHero(navControl) {
   if (!vf) return;
 
   // Set video frame to fixed positioning for scroll animation
-  vf.style.position = 'absolute';
+  vf.style.position = 'fixed';
   vf.style.overflow = 'hidden';
 
   // Ensure video element inside fills the frame
@@ -63,7 +63,7 @@ export function initHero(navControl) {
     } else if (isMobilePortrait) {
       // Mobile Portrait: largest relative size
       startWidth = vw * 0.65; // 65% of viewport
-      startTop = vh * 0.32; // 32% from top
+      startTop = vh * 0.25; // 25% from top
       textSlide = -180;
     } else {
       // Fallback for any edge cases
