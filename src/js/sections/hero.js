@@ -47,47 +47,45 @@ export function initHero(navControl) {
     const isMobilePortrait = vw <= 479; // Mobile Portrait: 479px and below
 
     // Starting dimensions - scale based on Webflow breakpoints
-    let startWidth, startWidthHalf, startTop, startLeft, textSlide;
+    let startWidth, startTop, startLeft, textSlide;
 
     if (isDesktop) {
       // Desktop: smaller video, lower position
-      startWidth = Math.min(vw * 0.3, 240); // 30% of viewport (max 240px)
-      startWidthHalf = startWidth / 2;
-      startTop = vh * 0.25; // 25% from top
-      startLeft = vw * 0.5 - startWidthHalf; // Right edge at 50%
-      textSlide = -360;
+      startWidth = 240;
+      startTop = 235;
+      startLeft = 300;
+      textSlide = -500; // Increased to slide text further up
     } else if (isTablet) {
       // Tablet: medium video, centered
-      startWidth = 190; // 35% of viewport
-      startTop = 260; // 28% from top
-      startLeft = 240; // Right edge at 50%
-      textSlide = -280;
+      startWidth = 190;
+      startTop = 260;
+      startLeft = 240;
+      textSlide = -400; // Increased to slide text further up
     } else if (isMobileLandscape) {
       // Mobile Landscape: larger video
-      startWidth = 225; // 50% of viewport
-      startTop = 215; // 30% from top
-      startLeft = 260; // Right edge at 50%
-      textSlide = -220;
+      startWidth = 225;
+      startTop = 215;
+      startLeft = 260;
+      textSlide = -350; // Increased to slide text further up
     } else if (isMobilePortrait) {
       // Mobile Portrait: largest relative size
-      startWidth = 140; // 65% of viewport
-      startTop = 235; // 25% from top
-      startLeft = 170; // Right edge at 50%
-      textSlide = -180;
+      startWidth = 140;
+      startTop = 235;
+      startLeft = 170;
+      textSlide = -300; // Increased to slide text further up
     } else {
       // Fallback for any edge cases
-      startWidth = vw * 0.5;
-      startWidthHalf = startWidth / 2;
-      startTop = vh * 0.3;
-      startLeft = vw * 0.5 - startWidthHalf; // Right edge at 50%
-      textSlide = -200;
+      startWidth = 240;
+      startTop = 300;
+      startLeft = 250;
+      textSlide = -350;
     }
 
     const startHeight = startWidth * (9 / 16); // Maintain 16:9 aspect ratio
 
     // Position so right edge is at 50% of screen
     //const startLeft = vw * 0.5 - startWidth; // Right edge at 50%
-    const startTopCentered = startTop - startHeight / 2; // Center vertically at the calculated position
+    //const startTopCentered = startTop - startHeight / 2; // Center vertically at the calculated position
 
     // End dimensions and position (full screen)
     const endWidth = vw;
@@ -130,7 +128,7 @@ export function initHero(navControl) {
     borderRadius: 6,
     boxShadow: '0 20px 50px rgba(0,0,0,.35)',
     opacity: 0,
-    zIndex: 2,
+    zIndex: -1, // Start behind text
   });
 
   gsap.set('#headline .clip-inner', {
@@ -165,8 +163,9 @@ export function initHero(navControl) {
   const ANIM_TRAVEL = window.innerHeight * 1.2;
   const HOLD_TRAVEL = window.innerHeight * 0.9;
   const TOTAL_TRAVEL = ANIM_TRAVEL + HOLD_TRAVEL;
-  const TEXT_EXIT_START = 0.05; // Start text exit very early
-  const TEXT_EXIT_END = 0.35; // Finish text exit before video expands significantly
+  const TEXT_EXIT_START = 0.0; // Start text exit immediately
+  const TEXT_EXIT_END = 0.3; // Finish text exit quickly
+  const VIDEO_ZINDEX_THRESHOLD = 0.25; // When to bring video forward (after text is mostly gone)
 
   if (heroOuter) {
     heroOuter.style.height = `${window.innerHeight + TOTAL_TRAVEL}px`;
@@ -228,6 +227,17 @@ export function initHero(navControl) {
           });
         }
 
+        // Dynamically manage z-index based on scroll progress
+        // Keep video behind text until text has mostly scrolled away
+        let videoZIndex;
+        if (ep < VIDEO_ZINDEX_THRESHOLD) {
+          videoZIndex = -1; // Behind text
+        } else if (ep >= 0.99) {
+          videoZIndex = 0; // Neutral at full expansion
+        } else {
+          videoZIndex = 2; // In front during animation
+        }
+
         // Animate video frame
         // When fully expanded (ep >= 0.99), snap to exact final values to avoid gaps
         if (ep >= 0.99) {
@@ -239,7 +249,7 @@ export function initHero(navControl) {
             rotation: 0,
             borderRadius: 0,
             boxShadow: 'none',
-            zIndex: 0,
+            zIndex: videoZIndex,
             x: 0,
             y: 0,
             transform: 'none', // Clear any GSAP transforms
@@ -253,7 +263,7 @@ export function initHero(navControl) {
             rotation: gsap.utils.interpolate(-4, 0, ep),
             borderRadius: gsap.utils.interpolate(6, 0, ep),
             boxShadow: `0 ${gsap.utils.interpolate(20, 0, ep)}px ${gsap.utils.interpolate(50, 0, ep)}px rgba(0,0,0,${gsap.utils.interpolate(0.35, 0, ep)})`,
-            zIndex: Math.round(gsap.utils.interpolate(2, 0, ep)),
+            zIndex: videoZIndex,
           });
         }
       },
