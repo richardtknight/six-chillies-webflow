@@ -10,7 +10,8 @@ gsap.registerPlugin(ScrollTrigger);
  */
 export function initHero(navControl) {
   const heroOuter = document.getElementById('heroOuter');
-  const heroTop = document.querySelector('.hero-top');
+  const heroTopRight = document.querySelector('.hero-top-right');
+  const eyebrow = document.getElementById('eyebrow');
   const vf = document.getElementById('videoFrame');
   const headline = document.getElementById('headline');
 
@@ -20,6 +21,15 @@ export function initHero(navControl) {
 
   // Set video frame to fixed positioning for scroll animation
   vf.style.position = 'fixed';
+  vf.style.overflow = 'hidden';
+
+  // Ensure video element inside fills the frame
+  const video = vf.querySelector('video, .hero-video');
+  if (video) {
+    video.style.width = '100%';
+    video.style.height = '100%';
+    video.style.objectFit = 'cover';
+  }
 
   // Starting dimensions and position
   const startWidth = 240; // Fixed width in pixels
@@ -124,12 +134,30 @@ export function initHero(navControl) {
           zIndex: 3,
         });
 
-        if (heroTop) {
-          const textProgress = Math.max(
-            0,
-            Math.min(1, (ep - TEXT_EXIT_START) / (TEXT_EXIT_END - TEXT_EXIT_START))
-          );
-          gsap.set(heroTop, {
+        // Animate text elements out before video expands
+        const textProgress = Math.max(
+          0,
+          Math.min(1, (ep - TEXT_EXIT_START) / (TEXT_EXIT_END - TEXT_EXIT_START))
+        );
+
+        if (heroTopRight) {
+          gsap.set(heroTopRight, {
+            y: TEXT_SLIDE_PX * textProgress,
+            opacity: 1 - textProgress,
+            filter: `blur(${textProgress * 12}px)`,
+          });
+        }
+
+        if (headline) {
+          gsap.set(headline, {
+            y: TEXT_SLIDE_PX * textProgress,
+            opacity: 1 - textProgress,
+            filter: `blur(${textProgress * 12}px)`,
+          });
+        }
+
+        if (eyebrow) {
+          gsap.set(eyebrow, {
             y: TEXT_SLIDE_PX * textProgress,
             opacity: 1 - textProgress,
             filter: `blur(${textProgress * 12}px)`,
