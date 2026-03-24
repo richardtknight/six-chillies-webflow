@@ -128,7 +128,7 @@ export function initHero(navControl) {
     borderRadius: 6,
     boxShadow: '0 20px 50px rgba(0,0,0,.35)',
     opacity: 0,
-    zIndex: -1, // Start behind text
+    zIndex: 1, // Start sandwiched between heading and span (span is z-index: 2)
   });
 
   gsap.set('#headline .clip-inner', {
@@ -228,14 +228,13 @@ export function initHero(navControl) {
         }
 
         // Dynamically manage z-index based on scroll progress
-        // Keep video behind text until text has mostly scrolled away
+        // Keep video sandwiched (z-index: 1) until text has mostly scrolled away
+        // Then bring to front (z-index: 3) above span (z-index: 2)
         let videoZIndex;
         if (ep < VIDEO_ZINDEX_THRESHOLD) {
-          videoZIndex = -1; // Behind text
-        } else if (ep >= 0.99) {
-          videoZIndex = 0; // Neutral at full expansion
+          videoZIndex = 1; // Sandwiched between heading and span
         } else {
-          videoZIndex = 2; // In front during animation
+          videoZIndex = 3; // On top during animation and when fully expanded
         }
 
         // Animate video frame
