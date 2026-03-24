@@ -27,23 +27,87 @@ export function initHero(navControl) {
   const video = vf.querySelector('video, .hero-video');
   if (video) {
     video.style.width = '100%';
-    video.style.height = 'auto';
+    video.style.height = '100%';
     video.style.objectFit = 'cover';
   }
 
-  // Starting dimensions and position
-  const startWidth = 240; // Fixed width in pixels
-  const startHeight = 135; // 16:9 aspect ratio (240 * 9/16)
+  // Responsive calculations based on Webflow breakpoints
+  function getResponsiveValues() {
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
 
-  // Position so right edge is at 50% of screen
-  const startLeft = 400; // Right edge at 50%
-  const startTop = 250; // 25% from top, centered vertically
+    // Webflow breakpoints
+    const isDesktop = vw > 991; // Desktop: 992px and above
+    const isTablet = vw <= 991 && vw > 767; // Tablet: 768px - 991px
+    const isMobileLandscape = vw <= 767 && vw > 479; // Mobile Landscape: 480px - 767px
+    const isMobilePortrait = vw <= 479; // Mobile Portrait: 479px and below
 
-  // End dimensions and position (full screen, centered)
-  const endWidth = window.innerWidth;
-  const endHeight = window.innerHeight;
-  const endLeft = 0;
-  const endTop = 0;
+    // Starting dimensions - scale based on Webflow breakpoints
+    let startWidth, startTop, textSlide;
+
+    if (isDesktop) {
+      // Desktop: smaller video, lower position
+      startWidth = Math.min(vw * 0.15, 240); // 15% of viewport (max 240px)
+      startTop = vh * 0.25; // 25% from top
+      textSlide = -360;
+    } else if (isTablet) {
+      // Tablet: medium video, centered
+      startWidth = vw * 0.35; // 35% of viewport
+      startTop = vh * 0.28; // 28% from top
+      textSlide = -280;
+    } else if (isMobileLandscape) {
+      // Mobile Landscape: larger video
+      startWidth = vw * 0.5; // 50% of viewport
+      startTop = vh * 0.3; // 30% from top
+      textSlide = -220;
+    } else if (isMobilePortrait) {
+      // Mobile Portrait: largest relative size
+      startWidth = vw * 0.65; // 65% of viewport
+      startTop = vh * 0.32; // 32% from top
+      textSlide = -180;
+    } else {
+      // Fallback for any edge cases
+      startWidth = vw * 0.5;
+      startTop = vh * 0.3;
+      textSlide = -200;
+    }
+
+    const startHeight = startWidth * (9 / 16); // Maintain 16:9 aspect ratio
+
+    // Position so right edge is at 50% of screen
+    const startLeft = vw * 0.5 - startWidth; // Right edge at 50%
+    const startTopCentered = startTop - startHeight / 2; // Center vertically at the calculated position
+
+    // End dimensions and position (full screen)
+    const endWidth = vw;
+    const endHeight = vh;
+    const endLeft = 0;
+    const endTop = 0;
+
+    return {
+      startWidth,
+      startHeight,
+      startLeft,
+      startTop: startTopCentered,
+      endWidth,
+      endHeight,
+      endLeft,
+      endTop,
+      textSlide,
+    };
+  }
+
+  let {
+    startWidth,
+    startHeight,
+    startLeft,
+    startTop,
+    endWidth,
+    endHeight,
+    endLeft,
+    endTop,
+    textSlide,
+  } = getResponsiveValues();
 
   gsap.set(vf, {
     width: startWidth,
@@ -91,7 +155,6 @@ export function initHero(navControl) {
   const TOTAL_TRAVEL = ANIM_TRAVEL + HOLD_TRAVEL;
   const TEXT_EXIT_START = 0.25;
   const TEXT_EXIT_END = 0.55;
-  const TEXT_SLIDE_PX = -360;
 
   if (heroOuter) {
     heroOuter.style.height = `${window.innerHeight + TOTAL_TRAVEL}px`;
@@ -131,7 +194,7 @@ export function initHero(navControl) {
 
         if (heroTopRight) {
           gsap.set(heroTopRight, {
-            y: TEXT_SLIDE_PX * textProgress,
+            y: textSlide * textProgress,
             opacity: 1 - textProgress,
             filter: `blur(${textProgress * 12}px)`,
           });
@@ -139,7 +202,7 @@ export function initHero(navControl) {
 
         if (headline) {
           gsap.set(headline, {
-            y: TEXT_SLIDE_PX * textProgress,
+            y: textSlide * textProgress,
             opacity: 1 - textProgress,
             filter: `blur(${textProgress * 12}px)`,
           });
@@ -147,7 +210,7 @@ export function initHero(navControl) {
 
         if (eyebrow) {
           gsap.set(eyebrow, {
-            y: TEXT_SLIDE_PX * textProgress,
+            y: textSlide * textProgress,
             opacity: 1 - textProgress,
             filter: `blur(${textProgress * 12}px)`,
           });
@@ -168,6 +231,18 @@ export function initHero(navControl) {
     });
 
     window.addEventListener('resize', () => {
+      // Recalculate responsive values on resize
+      const newValues = getResponsiveValues();
+      startWidth = newValues.startWidth;
+      startHeight = newValues.startHeight;
+      startLeft = newValues.startLeft;
+      startTop = newValues.startTop;
+      endWidth = newValues.endWidth;
+      endHeight = newValues.endHeight;
+      endLeft = newValues.endLeft;
+      endTop = newValues.endTop;
+      textSlide = newValues.textSlide;
+
       heroOuter.style.height = `${window.innerHeight + TOTAL_TRAVEL}px`;
       ScrollTrigger.refresh();
     });
