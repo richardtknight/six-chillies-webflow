@@ -23,12 +23,20 @@ export function initContentReveals() {
   // Character stagger reveal (data-attribute driven) - must be called before other animations
   charStaggerReveal('[data-char-stagger]');
 
-  // Fade and slide reveal (data-attribute driven)
-  fadeSlideReveal('[data-fade-slide]');
-
   // Small delay to ensure DOM has settled after text splitting, then refresh ScrollTrigger
   requestAnimationFrame(() => {
     ScrollTrigger.refresh();
+
+    // Call data-attribute driven animations AFTER refresh to ensure proper setup
+    fadeSlideReveal('[data-fade-slide]');
+
+    // Image zoom reveal - must be called after refresh
+    imageZoomReveal('.zoom-img', null, {
+      duration: 1.4,
+      ease: 'power3.out',
+      start: 'top 80%',
+    });
+
     console.log('ScrollTrigger refreshed. Total triggers:', ScrollTrigger.getAll().length);
   });
 
@@ -158,12 +166,5 @@ export function initContentReveals() {
       yoyo: true,
       delay: i * 0.5,
     });
-  });
-
-  // Image zoom reveal
-  imageZoomReveal('.zoom-img', null, {
-    duration: 1.4,
-    ease: 'power3.out',
-    start: 'top 80%',
   });
 }
