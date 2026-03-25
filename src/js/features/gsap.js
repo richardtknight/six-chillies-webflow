@@ -1,17 +1,10 @@
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+// Use the global GSAP instances already set up in main.js
+// DO NOT import fresh instances here as it will overwrite the registered ones
+const gsap = window.gsap;
+const ScrollTrigger = window.ScrollTrigger;
 
-// Expose GSAP globally to ensure single instance
-window.gsap = gsap;
-window.ScrollTrigger = ScrollTrigger;
-
-console.log('gsap.js: Setting up global GSAP and ScrollTrigger...');
-console.log('gsap.js: Before registerPlugin, gsap.plugins =', gsap.plugins);
-
-// Register ScrollTrigger plugin
-gsap.registerPlugin(ScrollTrigger);
-
-console.log('gsap.js: After registerPlugin, gsap.plugins =', gsap.plugins);
+console.log('gsap.js: Using global GSAP instances from main.js');
+console.log('gsap.js: gsap.plugins =', gsap.plugins);
 console.log('gsap.js: Plugin keys:', Object.keys(gsap.plugins));
 console.log('gsap.js: Has scrollTrigger?', 'scrollTrigger' in gsap.plugins);
 
