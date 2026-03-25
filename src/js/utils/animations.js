@@ -1,8 +1,7 @@
 import { splitIntoChars } from './textSplit';
 
-// Use global GSAP and ScrollTrigger instances set up in main.js
+// Use global GSAP instance set up in main.js
 const gsap = window.gsap;
-const ScrollTrigger = window.ScrollTrigger;
 
 /**
  * Peel reveal animation for text lines
