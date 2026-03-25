@@ -9,7 +9,11 @@ import {
   fadeSlideReveal,
 } from '../utils/animations';
 
+console.log('contentReveals: gsap =', gsap);
+console.log('contentReveals: ScrollTrigger =', ScrollTrigger);
+console.log('contentReveals: window.gsap =', window.gsap);
 gsap.registerPlugin(ScrollTrigger);
+console.log('contentReveals: Registered ScrollTrigger, gsap.plugins =', gsap.plugins);
 
 /**
  * Initializes all content reveal animations throughout the page

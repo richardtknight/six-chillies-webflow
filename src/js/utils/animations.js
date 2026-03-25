@@ -3,7 +3,11 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { splitIntoChars } from './textSplit';
 
 // Register ScrollTrigger plugin
+console.log('animations.js: gsap =', gsap);
+console.log('animations.js: ScrollTrigger =', ScrollTrigger);
+console.log('animations.js: About to register ScrollTrigger...');
 gsap.registerPlugin(ScrollTrigger);
+console.log('animations.js: Registered! gsap.plugins =', gsap.plugins);
 
 /**
  * Peel reveal animation for text lines
