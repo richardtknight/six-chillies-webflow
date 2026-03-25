@@ -3,6 +3,53 @@ import { splitIntoChars } from './textSplit';
 // Use global GSAP instance set up in main.js
 const gsap = window.gsap;
 
+// Characters to use for text scramble effect
+const SCRAMBLE_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%&*';
+
+/**
+ * Scrambles text and then reveals it character by character
+ * @param {HTMLElement} element - Text element to scramble
+ * @param {number} duration - Total duration in milliseconds
+ * @returns {Promise} Promise that resolves when animation completes
+ */
+function scrambleText(element, duration = 600) {
+  return new Promise((resolve) => {
+    const originalText = element.textContent;
+    const textLength = originalText.length;
+    let frame = 0;
+    const totalFrames = Math.floor(duration / 30); // ~30ms per frame
+
+    const interval = setInterval(() => {
+      // Calculate how many characters should be revealed
+      const revealedCount = Math.floor((frame / totalFrames) * textLength);
+
+      // Build the new text: revealed chars + scrambled remaining chars
+      let newText = '';
+      for (let i = 0; i < textLength; i++) {
+        if (i < revealedCount) {
+          // Character is revealed
+          newText += originalText[i];
+        } else if (originalText[i] === ' ') {
+          // Keep spaces as spaces
+          newText += ' ';
+        } else {
+          // Scramble this character
+          newText += SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)];
+        }
+      }
+
+      element.textContent = newText;
+      frame++;
+
+      if (frame >= totalFrames) {
+        element.textContent = originalText; // Ensure final text is exact
+        clearInterval(interval);
+        resolve();
+      }
+    }, 30);
+  });
+}
+
 /**
  * Peel reveal animation for text lines
  * @param {string} selector - CSS selector for elements
@@ -214,5 +261,77 @@ export function charStaggerReveal(selector, options = {}) {
         ease: cfg.ease,
         delay: dataDelay,
       });
+  });
+}
+
+/**
+ * Adds sophisticated hover effects to CTA arrow buttons
+ * - Rotates arrow icon by 45 degrees
+ * - Scrambles and reveals text
+ * - Smooth transitions
+ * @param {string} selector - CSS selector for CTA buttons (default: '.cta-arrow')
+ */
+export function initCtaArrowHover(selector = '.cta-arrow') {
+  const buttons = document.querySelectorAll(selector);
+  if (!buttons.length) return;
+
+  buttons.forEach((button) => {
+    // Find the arrow image and text element within this button
+    const arrowImg = button.querySelector('img');
+    const textElement = button.querySelector('.text-block-44, [class*="text-block"]');
+
+    if (!arrowImg || !textElement) return;
+
+    // Store original text
+    const originalText = textElement.textContent;
+    let isHovering = false;
+    let scrambleTimeout = null;
+
+    button.addEventListener('mouseenter', () => {
+      isHovering = true;
+
+      // Rotate arrow 45 degrees clockwise with smooth ease
+      gsap.to(arrowImg, {
+        rotation: 45,
+        duration: 0.6,
+        ease: 'power2.out',
+      });
+
+      // Slight scale up on the entire button for premium feel
+      gsap.to(button, {
+        scale: 1.02,
+        duration: 0.4,
+        ease: 'power2.out',
+      });
+
+      // Start text scramble after a tiny delay for stagger effect
+      scrambleTimeout = setTimeout(() => {
+        if (isHovering) {
+          scrambleText(textElement, 500);
+        }
+      }, 100);
+    });
+
+    button.addEventListener('mouseleave', () => {
+      isHovering = false;
+      clearTimeout(scrambleTimeout);
+
+      // Reset arrow rotation
+      gsap.to(arrowImg, {
+        rotation: 0,
+        duration: 0.5,
+        ease: 'power2.inOut',
+      });
+
+      // Reset button scale
+      gsap.to(button, {
+        scale: 1,
+        duration: 0.4,
+        ease: 'power2.inOut',
+      });
+
+      // Reset text immediately (in case scramble was in progress)
+      textElement.textContent = originalText;
+    });
   });
 }

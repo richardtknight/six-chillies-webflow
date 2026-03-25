@@ -5,6 +5,7 @@ import {
   charStaggerReveal,
   imageZoomReveal,
   fadeSlideReveal,
+  initCtaArrowHover,
 } from '../utils/animations';
 
 // Use global GSAP and ScrollTrigger instances
@@ -36,6 +37,9 @@ export function initContentReveals() {
       ease: 'power3.out',
       start: 'top 80%',
     });
+
+    // Initialize CTA arrow button hover effects
+    initCtaArrowHover('.cta-arrow');
   });
 
   // Logos section
