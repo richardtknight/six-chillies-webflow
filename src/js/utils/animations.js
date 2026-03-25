@@ -282,18 +282,23 @@ export function initCtaArrowHover(selector = '.cta-arrow') {
 
     if (!arrowImg || !textElement) return;
 
-    // Store original text
+    // Store original text and measure width
     const originalText = textElement.textContent;
+    const originalWidth = textElement.offsetWidth;
     let isHovering = false;
     let scrambleTimeout = null;
 
     button.addEventListener('mouseenter', () => {
       isHovering = true;
 
-      // Rotate arrow 45 degrees clockwise with smooth ease
+      // Lock the text element width to prevent jitter during scramble
+      textElement.style.width = `${originalWidth}px`;
+      textElement.style.display = 'inline-block';
+
+      // Rotate arrow 45 degrees clockwise - MUCH faster than text scramble
       gsap.to(arrowImg, {
         rotation: 45,
-        duration: 0.6,
+        duration: 0.3,
         ease: 'power2.out',
       });
 
@@ -330,8 +335,10 @@ export function initCtaArrowHover(selector = '.cta-arrow') {
         ease: 'power2.inOut',
       });
 
-      // Reset text immediately (in case scramble was in progress)
+      // Reset text and width immediately (in case scramble was in progress)
       textElement.textContent = originalText;
+      textElement.style.width = '';
+      textElement.style.display = '';
     });
   });
 }
