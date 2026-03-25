@@ -1,3 +1,19 @@
+// CRITICAL: Set up global GSAP FIRST before any other imports
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+// Expose globally immediately
+window.gsap = gsap;
+window.ScrollTrigger = ScrollTrigger;
+
+// Register ScrollTrigger
+gsap.registerPlugin(ScrollTrigger);
+
+console.log('main.js: GSAP setup complete at top of file');
+console.log('main.js: gsap.plugins =', gsap.plugins);
+console.log('main.js: Plugin keys:', Object.keys(gsap.plugins));
+console.log('main.js: Has scrollTrigger?', 'scrollTrigger' in gsap.plugins);
+
 // DEBUG: Verify new code is loading
 console.log('=== NEW CODE LOADED at', new Date().toISOString(), '===');
 console.log('main.js: Starting execution...');

@@ -1,5 +1,3 @@
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { splitIntoLines } from '../utils/textSplit';
 import {
   peelReveal,
@@ -9,14 +7,17 @@ import {
   fadeSlideReveal,
 } from '../utils/animations';
 
-console.log('contentReveals: gsap =', gsap);
-console.log('contentReveals: ScrollTrigger =', ScrollTrigger);
-console.log('contentReveals: window.gsap =', window.gsap);
-console.log('contentReveals: gsap === window.gsap?', gsap === window.gsap);
-gsap.registerPlugin(ScrollTrigger);
-console.log('contentReveals: Registered ScrollTrigger, gsap.plugins =', gsap.plugins);
-console.log('contentReveals: All plugin keys:', Object.keys(gsap.plugins));
-console.log('contentReveals: ScrollTrigger in plugins?', 'scrollTrigger' in gsap.plugins);
+// Use global GSAP and ScrollTrigger instances
+const gsap = window.gsap;
+const ScrollTrigger = window.ScrollTrigger;
+
+console.log('contentReveals: Using global gsap =', gsap);
+console.log('contentReveals: Using global ScrollTrigger =', ScrollTrigger);
+console.log('contentReveals: gsap.plugins =', gsap?.plugins);
+console.log(
+  'contentReveals: All plugin keys:',
+  gsap ? Object.keys(gsap.plugins) : 'gsap not ready'
+);
 
 /**
  * Initializes all content reveal animations throughout the page

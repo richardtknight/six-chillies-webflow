@@ -1,16 +1,13 @@
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { splitIntoChars } from './textSplit';
 
-// Register ScrollTrigger plugin
-console.log('animations.js: gsap =', gsap);
-console.log('animations.js: ScrollTrigger =', ScrollTrigger);
-console.log('animations.js: About to register ScrollTrigger...');
-gsap.registerPlugin(ScrollTrigger);
-console.log('animations.js: Registered! gsap.plugins =', gsap.plugins);
-console.log('animations.js: ScrollTrigger in gsap.plugins?', 'scrollTrigger' in gsap.plugins);
-console.log('animations.js: gsap.plugins.scrollTrigger =', gsap.plugins.scrollTrigger);
-console.log('animations.js: All plugin keys:', Object.keys(gsap.plugins));
+// Use global GSAP and ScrollTrigger instances set up in features/gsap.js
+const gsap = window.gsap;
+const ScrollTrigger = window.ScrollTrigger;
+
+console.log('animations.js: Using global gsap =', gsap);
+console.log('animations.js: Using global ScrollTrigger =', ScrollTrigger);
+console.log('animations.js: gsap.plugins =', gsap?.plugins);
+console.log('animations.js: All plugin keys:', gsap ? Object.keys(gsap.plugins) : 'gsap not ready');
 
 /**
  * Peel reveal animation for text lines
