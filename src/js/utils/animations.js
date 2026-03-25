@@ -96,16 +96,16 @@ export function imageZoomReveal(selector, trigger, opts = {}) {
         trigger: trigger || img,
         start: opts.start || 'top 80%',
         toggleActions: 'play reverse play reverse',
-        onUpdate: (self) => {
-          // Track if scroll animation is complete
-          const wasComplete = img.dataset.scrollComplete === 'true';
-          const isComplete = self.progress >= 0.99;
-          img.dataset.scrollComplete = isComplete ? 'true' : 'false';
-
-          if (!wasComplete && isComplete) {
-            console.log('imageZoomReveal: Scroll animation completed! Hover now enabled for:', img);
-          }
-        },
+      },
+      onComplete: () => {
+        // Mark as complete when the animation tween finishes
+        img.dataset.scrollComplete = 'true';
+        console.log('imageZoomReveal: Animation completed! Hover now enabled for:', img);
+      },
+      onReverseComplete: () => {
+        // Mark as incomplete when animation reverses (scrolling back up)
+        img.dataset.scrollComplete = 'false';
+        console.log('imageZoomReveal: Animation reversed, hover disabled for:', img);
       },
     });
 
