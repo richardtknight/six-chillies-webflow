@@ -12,8 +12,11 @@ import {
 console.log('contentReveals: gsap =', gsap);
 console.log('contentReveals: ScrollTrigger =', ScrollTrigger);
 console.log('contentReveals: window.gsap =', window.gsap);
+console.log('contentReveals: gsap === window.gsap?', gsap === window.gsap);
 gsap.registerPlugin(ScrollTrigger);
 console.log('contentReveals: Registered ScrollTrigger, gsap.plugins =', gsap.plugins);
+console.log('contentReveals: All plugin keys:', Object.keys(gsap.plugins));
+console.log('contentReveals: ScrollTrigger in plugins?', 'scrollTrigger' in gsap.plugins);
 
 /**
  * Initializes all content reveal animations throughout the page
@@ -70,6 +73,10 @@ export function initContentReveals() {
     duration: 1.0,
     start: 'top 78%',
   });
+  console.log('DEBUG: About to call gsap.from(.manifesto-quote) with scrollTrigger...');
+  console.log('DEBUG: gsap.plugins at this moment =', gsap.plugins);
+  console.log('DEBUG: Plugin keys:', Object.keys(gsap.plugins));
+  console.log('DEBUG: Has scrollTrigger?', 'scrollTrigger' in gsap.plugins);
   gsap.from('.manifesto-quote', {
     opacity: 0,
     y: 16,

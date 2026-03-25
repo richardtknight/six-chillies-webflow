@@ -8,6 +8,9 @@ console.log('animations.js: ScrollTrigger =', ScrollTrigger);
 console.log('animations.js: About to register ScrollTrigger...');
 gsap.registerPlugin(ScrollTrigger);
 console.log('animations.js: Registered! gsap.plugins =', gsap.plugins);
+console.log('animations.js: ScrollTrigger in gsap.plugins?', 'scrollTrigger' in gsap.plugins);
+console.log('animations.js: gsap.plugins.scrollTrigger =', gsap.plugins.scrollTrigger);
+console.log('animations.js: All plugin keys:', Object.keys(gsap.plugins));
 
 /**
  * Peel reveal animation for text lines
