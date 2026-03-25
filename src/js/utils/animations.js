@@ -1,13 +1,8 @@
 import { splitIntoChars } from './textSplit';
 
-// Use global GSAP and ScrollTrigger instances set up in features/gsap.js
+// Use global GSAP and ScrollTrigger instances set up in main.js
 const gsap = window.gsap;
 const ScrollTrigger = window.ScrollTrigger;
-
-console.log('animations.js: Using global gsap =', gsap);
-console.log('animations.js: Using global ScrollTrigger =', ScrollTrigger);
-console.log('animations.js: gsap.plugins =', gsap?.plugins);
-console.log('animations.js: All plugin keys:', gsap ? Object.keys(gsap.plugins) : 'gsap not ready');
 
 /**
  * Peel reveal animation for text lines
@@ -66,18 +61,16 @@ export function eyebrowReveal(selector, trigger) {
 /**
  * Zoom reveal animation for images
  * Images start zoomed in and scale down to normal size on scroll
- * Also adds hover effect to zoom in to 130% on hover
+ * Also adds hover effect to zoom in to 120% on hover
  * @param {string} selector - CSS selector for images
  * @param {string} trigger - ScrollTrigger element (optional, defaults to selector)
  * @param {Object} opts - Animation options
  */
 export function imageZoomReveal(selector, trigger, opts = {}) {
   const images = document.querySelectorAll(selector);
-  console.log('imageZoomReveal: selector =', selector, ', found', images.length, 'images');
   if (!images.length) return;
 
-  images.forEach((img, index) => {
-    console.log(`imageZoomReveal: Processing image ${index + 1}:`, img);
+  images.forEach((img) => {
     // Ensure the image wrapper has overflow hidden to prevent zoomed image from extending beyond bounds
     if (img.parentElement) {
       img.parentElement.style.overflow = 'hidden';
@@ -87,7 +80,7 @@ export function imageZoomReveal(selector, trigger, opts = {}) {
     img.dataset.scrollComplete = 'false';
 
     // Create the zoom animation with proper initial state
-    const animation = gsap.from(img, {
+    gsap.from(img, {
       scale: 1.3,
       duration: opts.duration || 1.2,
       ease: opts.ease || 'power2.out',
@@ -100,41 +93,31 @@ export function imageZoomReveal(selector, trigger, opts = {}) {
       onComplete: () => {
         // Mark as complete when the animation tween finishes
         img.dataset.scrollComplete = 'true';
-        console.log('imageZoomReveal: Animation completed! Hover now enabled for:', img);
       },
       onReverseComplete: () => {
         // Mark as incomplete when animation reverses (scrolling back up)
         img.dataset.scrollComplete = 'false';
-        console.log('imageZoomReveal: Animation reversed, hover disabled for:', img);
       },
     });
 
-    console.log('imageZoomReveal: Created animation with ScrollTrigger:', animation.scrollTrigger);
-
     // Add hover effect that respects scroll animation
     img.addEventListener('mouseenter', () => {
-      console.log('imageZoomReveal: mouseenter - scrollComplete =', img.dataset.scrollComplete);
       // Only zoom in on hover if scroll animation has completed
       if (img.dataset.scrollComplete === 'true') {
-        console.log('imageZoomReveal: Zooming in on hover');
         gsap.to(img, {
-          scale: 1.3,
-          duration: 0.6,
-          ease: 'power2.out',
+          scale: 1.2,
+          duration: 0.8,
+          ease: 'power1.inOut',
         });
-      } else {
-        console.log('imageZoomReveal: Scroll animation not complete yet, skipping hover zoom');
       }
     });
 
     img.addEventListener('mouseleave', () => {
-      console.log('imageZoomReveal: mouseleave - scrollComplete =', img.dataset.scrollComplete);
       if (img.dataset.scrollComplete === 'true') {
-        console.log('imageZoomReveal: Zooming out on leave');
         gsap.to(img, {
           scale: 1,
-          duration: 0.6,
-          ease: 'power2.out',
+          duration: 0.8,
+          ease: 'power1.inOut',
         });
       }
     });
@@ -159,18 +142,16 @@ export function fadeSlideReveal(selector, options = {}) {
   const cfg = Object.assign({}, defaults, options);
   const elements = document.querySelectorAll(selector);
 
-  console.log('fadeSlideReveal: selector =', selector, ', found', elements.length, 'elements');
   if (!elements.length) return;
 
-  elements.forEach((el, index) => {
-    console.log(`fadeSlideReveal: Processing element ${index + 1}:`, el);
+  elements.forEach((el) => {
     // Read data attributes for per-element customization
     const dataY = parseFloat(el.dataset.fadeSlideY) || cfg.y;
     const dataDuration = parseFloat(el.dataset.fadeSlideDuration) || cfg.duration;
     const dataDelay = parseFloat(el.dataset.fadeSlideDelay) || cfg.delay;
     const dataStart = el.dataset.fadeSlideStart || cfg.start;
 
-    const animation = gsap.from(el, {
+    gsap.from(el, {
       opacity: 0,
       y: dataY,
       duration: dataDuration,
@@ -182,8 +163,6 @@ export function fadeSlideReveal(selector, options = {}) {
         toggleActions: 'play reverse play reverse',
       },
     });
-
-    console.log('fadeSlideReveal: Created animation with ScrollTrigger:', animation.scrollTrigger);
   });
 }
 
@@ -204,8 +183,6 @@ export function charStaggerReveal(selector, options = {}) {
   const cfg = Object.assign({}, defaults, options);
   const elements = typeof selector === 'string' ? document.querySelectorAll(selector) : [selector];
 
-  console.log('charStaggerReveal: Found', elements.length, 'elements for selector:', selector);
-
   elements.forEach((el) => {
     if (!el) return;
     const dataStagger = parseFloat(el.dataset.stagger) || cfg.stagger;
@@ -218,16 +195,11 @@ export function charStaggerReveal(selector, options = {}) {
     }
 
     const chars = splitIntoChars(el);
-    if (!chars.length) {
-      console.warn('charStaggerReveal: No chars created for element:', el);
-      return;
-    }
-
-    console.log('charStaggerReveal: Created', chars.length, 'chars for element');
+    if (!chars.length) return;
 
     gsap.set(chars, dataFrom);
 
-    const tl = gsap
+    gsap
       .timeline({
         scrollTrigger: {
           trigger: el,
@@ -243,7 +215,5 @@ export function charStaggerReveal(selector, options = {}) {
         ease: cfg.ease,
         delay: dataDelay,
       });
-
-    console.log('charStaggerReveal: Animation created with ScrollTrigger:', tl.scrollTrigger);
   });
 }

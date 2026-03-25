@@ -11,14 +11,6 @@ import {
 const gsap = window.gsap;
 const ScrollTrigger = window.ScrollTrigger;
 
-console.log('contentReveals: Using global gsap =', gsap);
-console.log('contentReveals: Using global ScrollTrigger =', ScrollTrigger);
-console.log('contentReveals: gsap.plugins =', gsap?.plugins);
-console.log(
-  'contentReveals: All plugin keys:',
-  gsap ? Object.keys(gsap.plugins) : 'gsap not ready'
-);
-
 /**
  * Initializes all content reveal animations throughout the page
  */
@@ -33,23 +25,17 @@ export function initContentReveals() {
 
   // Small delay to ensure DOM has settled after text splitting, then refresh ScrollTrigger
   requestAnimationFrame(() => {
-    console.log('=== Starting ScrollTrigger refresh and animations setup ===');
     ScrollTrigger.refresh();
 
     // Call data-attribute driven animations AFTER refresh to ensure proper setup
-    console.log('Calling fadeSlideReveal...');
     fadeSlideReveal('[data-fade-slide]');
 
     // Image zoom reveal - must be called after refresh
-    console.log('Calling imageZoomReveal...');
     imageZoomReveal('.zoom-img', null, {
       duration: 1.4,
       ease: 'power3.out',
       start: 'top 80%',
     });
-
-    console.log('ScrollTrigger refreshed. Total triggers:', ScrollTrigger.getAll().length);
-    console.log('All ScrollTriggers:', ScrollTrigger.getAll());
   });
 
   // Logos section
@@ -74,10 +60,6 @@ export function initContentReveals() {
     duration: 1.0,
     start: 'top 78%',
   });
-  console.log('DEBUG: About to call gsap.from(.manifesto-quote) with scrollTrigger...');
-  console.log('DEBUG: gsap.plugins at this moment =', gsap.plugins);
-  console.log('DEBUG: Plugin keys:', Object.keys(gsap.plugins));
-  console.log('DEBUG: Has scrollTrigger?', 'scrollTrigger' in gsap.plugins);
   gsap.from('.manifesto-quote', {
     opacity: 0,
     y: 16,
