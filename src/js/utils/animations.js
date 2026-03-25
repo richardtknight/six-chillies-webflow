@@ -98,7 +98,13 @@ export function imageZoomReveal(selector, trigger, opts = {}) {
         toggleActions: 'play reverse play reverse',
         onUpdate: (self) => {
           // Track if scroll animation is complete
-          img.dataset.scrollComplete = self.progress >= 0.99 ? 'true' : 'false';
+          const wasComplete = img.dataset.scrollComplete === 'true';
+          const isComplete = self.progress >= 0.99;
+          img.dataset.scrollComplete = isComplete ? 'true' : 'false';
+
+          if (!wasComplete && isComplete) {
+            console.log('imageZoomReveal: Scroll animation completed! Hover now enabled for:', img);
+          }
         },
       },
     });
@@ -107,18 +113,24 @@ export function imageZoomReveal(selector, trigger, opts = {}) {
 
     // Add hover effect that respects scroll animation
     img.addEventListener('mouseenter', () => {
+      console.log('imageZoomReveal: mouseenter - scrollComplete =', img.dataset.scrollComplete);
       // Only zoom in on hover if scroll animation has completed
       if (img.dataset.scrollComplete === 'true') {
+        console.log('imageZoomReveal: Zooming in on hover');
         gsap.to(img, {
           scale: 1.3,
           duration: 0.6,
           ease: 'power2.out',
         });
+      } else {
+        console.log('imageZoomReveal: Scroll animation not complete yet, skipping hover zoom');
       }
     });
 
     img.addEventListener('mouseleave', () => {
+      console.log('imageZoomReveal: mouseleave - scrollComplete =', img.dataset.scrollComplete);
       if (img.dataset.scrollComplete === 'true') {
+        console.log('imageZoomReveal: Zooming out on leave');
         gsap.to(img, {
           scale: 1,
           duration: 0.6,
