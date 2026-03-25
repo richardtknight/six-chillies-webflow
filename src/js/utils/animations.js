@@ -70,42 +70,31 @@ export function imageZoomReveal(selector, trigger, opts = {}) {
   const images = document.querySelectorAll(selector);
   if (!images.length) return;
 
-  console.log('imageZoomReveal: Found', images.length, 'images for selector:', selector);
-
   images.forEach((img) => {
     // Ensure the image wrapper has overflow hidden to prevent zoomed image from extending beyond bounds
     if (img.parentElement) {
       img.parentElement.style.overflow = 'hidden';
     }
 
-    // Set initial zoomed-in state
-    gsap.set(img, { scale: 1.3 });
+    // Track if animation is complete
     img.dataset.scrollComplete = 'false';
 
-    console.log('imageZoomReveal: Set up image with initial scale 1.3:', img);
-
-    // Create the scroll-triggered zoom out animation using fromTo for clearer control
-    gsap.fromTo(
-      img,
-      { scale: 1.3 },
-      {
-        scale: 1,
-        duration: opts.duration || 1.2,
-        ease: opts.ease || 'power2.out',
-        scrollTrigger: {
-          trigger: trigger || img,
-          start: opts.start || 'top 80%',
-          toggleActions: 'play reverse play reverse',
-          onEnter: () => {
-            console.log('imageZoomReveal: ScrollTrigger entered for image:', img);
-          },
-          onUpdate: (self) => {
-            // Track if scroll animation is complete
-            img.dataset.scrollComplete = self.progress >= 0.99 ? 'true' : 'false';
-          },
+    // Create the zoom animation with proper initial state
+    gsap.from(img, {
+      scale: 1.3,
+      duration: opts.duration || 1.2,
+      ease: opts.ease || 'power2.out',
+      immediateRender: true, // Ensure initial state is set immediately
+      scrollTrigger: {
+        trigger: trigger || img,
+        start: opts.start || 'top 80%',
+        toggleActions: 'play reverse play reverse',
+        onUpdate: (self) => {
+          // Track if scroll animation is complete
+          img.dataset.scrollComplete = self.progress >= 0.99 ? 'true' : 'false';
         },
-      }
-    );
+      },
+    });
 
     // Add hover effect that respects scroll animation
     img.addEventListener('mouseenter', () => {
