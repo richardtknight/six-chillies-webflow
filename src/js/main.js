@@ -1,3 +1,15 @@
+// DEBUG: Verify new code is loading
+console.log('=== NEW CODE LOADED at', new Date().toISOString(), '===');
+console.log('main.js: Starting execution...');
+
+// Create visible banner to confirm code is loading
+const debugBanner = document.createElement('div');
+debugBanner.style.cssText =
+  'position: fixed; top: 0; left: 0; right: 0; background: red; color: white; padding: 10px; text-align: center; z-index: 999999; font-size: 16px; font-weight: bold;';
+debugBanner.textContent = `NEW CODE LOADED: ${new Date().toLocaleTimeString()}`;
+document.body?.appendChild(debugBanner);
+setTimeout(() => debugBanner?.remove(), 5000); // Remove after 5 seconds
+
 import { onReady } from './core/dom';
 import { initApp } from './core/init';
 
