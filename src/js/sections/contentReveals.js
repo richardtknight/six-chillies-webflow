@@ -25,12 +25,15 @@ export function initContentReveals() {
 
   // Small delay to ensure DOM has settled after text splitting, then refresh ScrollTrigger
   requestAnimationFrame(() => {
+    console.log('=== Starting ScrollTrigger refresh and animations setup ===');
     ScrollTrigger.refresh();
 
     // Call data-attribute driven animations AFTER refresh to ensure proper setup
+    console.log('Calling fadeSlideReveal...');
     fadeSlideReveal('[data-fade-slide]');
 
     // Image zoom reveal - must be called after refresh
+    console.log('Calling imageZoomReveal...');
     imageZoomReveal('.zoom-img', null, {
       duration: 1.4,
       ease: 'power3.out',
@@ -38,6 +41,7 @@ export function initContentReveals() {
     });
 
     console.log('ScrollTrigger refreshed. Total triggers:', ScrollTrigger.getAll().length);
+    console.log('All ScrollTriggers:', ScrollTrigger.getAll());
   });
 
   // Logos section

@@ -68,9 +68,11 @@ export function eyebrowReveal(selector, trigger) {
  */
 export function imageZoomReveal(selector, trigger, opts = {}) {
   const images = document.querySelectorAll(selector);
+  console.log('imageZoomReveal: selector =', selector, ', found', images.length, 'images');
   if (!images.length) return;
 
-  images.forEach((img) => {
+  images.forEach((img, index) => {
+    console.log(`imageZoomReveal: Processing image ${index + 1}:`, img);
     // Ensure the image wrapper has overflow hidden to prevent zoomed image from extending beyond bounds
     if (img.parentElement) {
       img.parentElement.style.overflow = 'hidden';
@@ -80,7 +82,7 @@ export function imageZoomReveal(selector, trigger, opts = {}) {
     img.dataset.scrollComplete = 'false';
 
     // Create the zoom animation with proper initial state
-    gsap.from(img, {
+    const animation = gsap.from(img, {
       scale: 1.3,
       duration: opts.duration || 1.2,
       ease: opts.ease || 'power2.out',
@@ -95,6 +97,8 @@ export function imageZoomReveal(selector, trigger, opts = {}) {
         },
       },
     });
+
+    console.log('imageZoomReveal: Created animation with ScrollTrigger:', animation.scrollTrigger);
 
     // Add hover effect that respects scroll animation
     img.addEventListener('mouseenter', () => {
@@ -138,16 +142,18 @@ export function fadeSlideReveal(selector, options = {}) {
   const cfg = Object.assign({}, defaults, options);
   const elements = document.querySelectorAll(selector);
 
+  console.log('fadeSlideReveal: selector =', selector, ', found', elements.length, 'elements');
   if (!elements.length) return;
 
-  elements.forEach((el) => {
+  elements.forEach((el, index) => {
+    console.log(`fadeSlideReveal: Processing element ${index + 1}:`, el);
     // Read data attributes for per-element customization
     const dataY = parseFloat(el.dataset.fadeSlideY) || cfg.y;
     const dataDuration = parseFloat(el.dataset.fadeSlideDuration) || cfg.duration;
     const dataDelay = parseFloat(el.dataset.fadeSlideDelay) || cfg.delay;
     const dataStart = el.dataset.fadeSlideStart || cfg.start;
 
-    gsap.from(el, {
+    const animation = gsap.from(el, {
       opacity: 0,
       y: dataY,
       duration: dataDuration,
@@ -159,6 +165,8 @@ export function fadeSlideReveal(selector, options = {}) {
         toggleActions: 'play reverse play reverse',
       },
     });
+
+    console.log('fadeSlideReveal: Created animation with ScrollTrigger:', animation.scrollTrigger);
   });
 }
 
