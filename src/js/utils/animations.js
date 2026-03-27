@@ -342,3 +342,154 @@ export function initCtaArrowHover(selector = '.cta-arrow') {
     });
   });
 }
+
+/**
+ * Creates a 3D floating orbit animation for images with mouse interaction
+ * Images float in an elliptical 3D space and react to mouse proximity
+ * @param {string} containerSelector - Container element selector
+ * @param {Object} options - Animation options
+ */
+export function init3DFloatingOrbit(containerSelector, options = {}) {
+  const container = document.querySelector(containerSelector);
+  if (!container) return;
+
+  const images = Array.from(container.querySelectorAll('img'));
+  if (!images.length) return;
+
+  const config = {
+    radiusX: options.radiusX || 150, // Horizontal radius
+    radiusY: options.radiusY || 100, // Vertical radius
+    radiusZ: options.radiusZ || 80, // Depth radius
+    rotationSpeed: options.rotationSpeed || 0.0008, // Radians per frame
+    mouseInfluence: options.mouseInfluence || 80, // Pixels of magnetic pull
+    hoverScale: options.hoverScale || 1.3, // Scale on hover
+    ...options,
+  };
+
+  // Set up container for 3D perspective
+  container.style.perspective = '1200px';
+  container.style.perspectiveOrigin = '50% 50%';
+  container.style.position = 'relative';
+  container.style.transformStyle = 'preserve-3d';
+
+  // Track state for each image
+  const imageStates = images.map((img, index) => {
+    const angle = (index / images.length) * Math.PI * 2;
+
+    // Set up image styles
+    img.style.position = 'absolute';
+    img.style.top = '50%';
+    img.style.left = '50%';
+    img.style.transformStyle = 'preserve-3d';
+    img.style.cursor = 'pointer';
+    img.style.transition = 'filter 0.3s ease';
+
+    return {
+      img,
+      angle,
+      baseAngle: angle,
+      isHovered: false,
+      mouseOffset: { x: 0, y: 0 },
+    };
+  });
+
+  // Mouse tracking
+  let mouseX = 0;
+  let mouseY = 0;
+
+  container.addEventListener('mousemove', (e) => {
+    const rect = container.getBoundingClientRect();
+    mouseX = e.clientX - rect.left - rect.width / 2;
+    mouseY = e.clientY - rect.top - rect.height / 2;
+  });
+
+  container.addEventListener('mouseleave', () => {
+    mouseX = 0;
+    mouseY = 0;
+  });
+
+  // Add hover effects to each image
+  imageStates.forEach((state) => {
+    state.img.addEventListener('mouseenter', () => {
+      state.isHovered = true;
+      gsap.to(state.img, {
+        scale: config.hoverScale,
+        filter: 'brightness(1.2)',
+        duration: 0.4,
+        ease: 'power2.out',
+      });
+    });
+
+    state.img.addEventListener('mouseleave', () => {
+      state.isHovered = false;
+      gsap.to(state.img, {
+        scale: 1,
+        filter: 'brightness(1)',
+        duration: 0.4,
+        ease: 'power2.out',
+      });
+    });
+  });
+
+  // Animation loop
+  function animate() {
+    imageStates.forEach((state) => {
+      // Increment angle for constant rotation
+      state.angle += config.rotationSpeed;
+
+      // Calculate base elliptical position
+      const baseX = Math.cos(state.angle) * config.radiusX;
+      const baseY = Math.sin(state.angle) * config.radiusY;
+      const baseZ = Math.sin(state.angle * 2) * config.radiusZ;
+
+      // Calculate distance from mouse
+      const dx = mouseX - baseX;
+      const dy = mouseY - baseY;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+
+      // Apply mouse influence (magnetic effect)
+      let finalX = baseX;
+      let finalY = baseY;
+      let finalZ = baseZ;
+
+      if (distance < config.mouseInfluence && distance > 0) {
+        const influence = (1 - distance / config.mouseInfluence) * 0.3;
+        finalX += dx * influence;
+        finalY += dy * influence;
+      }
+
+      // When hovered, bring to front
+      if (state.isHovered) {
+        finalZ = config.radiusZ * 1.5;
+      }
+
+      // Calculate depth-based scale and opacity for depth perception
+      const depthScale = 0.7 + ((finalZ + config.radiusZ) / (config.radiusZ * 2)) * 0.3;
+      const opacity = 0.6 + ((finalZ + config.radiusZ) / (config.radiusZ * 2)) * 0.4;
+
+      // Apply transforms
+      gsap.set(state.img, {
+        x: finalX,
+        y: finalY,
+        z: finalZ,
+        scale: state.isHovered ? config.hoverScale : depthScale,
+        opacity: state.isHovered ? 1 : opacity,
+        rotateY: (finalZ / config.radiusZ) * 15, // Slight rotation based on depth
+        zIndex: Math.round(finalZ + 100),
+      });
+    });
+
+    requestAnimationFrame(animate);
+  }
+
+  // Start animation
+  animate();
+
+  // Return cleanup function
+  return () => {
+    imageStates.forEach((state) => {
+      state.img.removeEventListener('mouseenter', null);
+      state.img.removeEventListener('mouseleave', null);
+    });
+  };
+}
