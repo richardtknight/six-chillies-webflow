@@ -1,5 +1,6 @@
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { init3DFloatingOrbit } from '../utils/animations';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -16,6 +17,16 @@ export function initHero(navControl) {
   const headlineOverlay = document.getElementById('headingOverlay');
   const heroSticky = document.querySelector('.hero-sticky');
   const heroBg = document.getElementById('heroBg');
+
+  // Initialize 3D floating orbit animation
+  init3DFloatingOrbit('.floating-orbit-container', {
+    radiusX: 180, // Horizontal spread
+    radiusY: 120, // Vertical spread
+    radiusZ: 100, // Depth
+    rotationSpeed: 0.001, // Speed
+    mouseInfluence: 100, // Magnetic distance
+    hoverScale: 1.4, // Hover zoom
+  });
 
   // if (headline) splitIntoLines(headline);
 
