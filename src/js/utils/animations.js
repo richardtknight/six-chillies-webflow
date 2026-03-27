@@ -389,7 +389,16 @@ export function init3DFloatingOrbit(containerSelector, options = {}) {
       angle,
       baseAngle: angle,
       isHovered: false,
+      wasHovered: false,
       mouseOffset: { x: 0, y: 0 },
+      // Random offsets for organic movement
+      randomOffset1: Math.random() * Math.PI * 2,
+      randomOffset2: Math.random() * Math.PI * 2,
+      randomOffset3: Math.random() * Math.PI * 2,
+      // Random speed multipliers for varied movement
+      randomSpeed1: 0.8 + Math.random() * 0.4, // 0.8-1.2x
+      randomSpeed2: 0.7 + Math.random() * 0.6, // 0.7-1.3x
+      randomSpeed3: 0.9 + Math.random() * 0.3, // 0.9-1.2x
     };
   });
 
@@ -442,15 +451,24 @@ export function init3DFloatingOrbit(containerSelector, options = {}) {
       const baseY = Math.sin(state.angle) * config.radiusY;
       const baseZ = Math.sin(state.angle * 2) * config.radiusZ;
 
+      // Add organic jitter using random offsets and speed multipliers
+      const jitterX =
+        Math.sin(state.angle * state.randomSpeed1 + state.randomOffset1) * 10 +
+        Math.cos(state.angle * 0.5 * state.randomSpeed2 + state.randomOffset2) * 5;
+      const jitterY =
+        Math.cos(state.angle * state.randomSpeed2 + state.randomOffset2) * 8 +
+        Math.sin(state.angle * 0.7 * state.randomSpeed1 + state.randomOffset1) * 4;
+      const jitterZ = Math.sin(state.angle * 1.5 * state.randomSpeed3 + state.randomOffset3) * 6;
+
       // Calculate distance from mouse
       const dx = mouseX - baseX;
       const dy = mouseY - baseY;
       const distance = Math.sqrt(dx * dx + dy * dy);
 
-      // Apply mouse influence (magnetic effect)
-      let finalX = baseX;
-      let finalY = baseY;
-      let finalZ = baseZ;
+      // Apply mouse influence (magnetic effect) and jitter
+      let finalX = baseX + jitterX;
+      let finalY = baseY + jitterY;
+      let finalZ = baseZ + jitterZ;
 
       if (distance < config.mouseInfluence && distance > 0) {
         const influence = (1 - distance / config.mouseInfluence) * 0.3;
@@ -467,13 +485,26 @@ export function init3DFloatingOrbit(containerSelector, options = {}) {
       const depthScale = 0.7 + ((finalZ + config.radiusZ) / (config.radiusZ * 2)) * 0.3;
       const opacity = 0.6 + ((finalZ + config.radiusZ) / (config.radiusZ * 2)) * 0.4;
 
-      // Apply transforms
+      // Smooth scale transition when hover state changes
+      if (state.isHovered !== state.wasHovered) {
+        const targetScale = state.isHovered ? config.hoverScale : depthScale;
+        const targetOpacity = state.isHovered ? 1 : opacity;
+
+        gsap.to(state.img, {
+          scale: targetScale,
+          opacity: targetOpacity,
+          duration: 0.5,
+          ease: 'power2.out',
+        });
+
+        state.wasHovered = state.isHovered;
+      }
+
+      // Apply position transforms (always immediate for smooth orbit)
       gsap.set(state.img, {
         x: finalX,
         y: finalY,
         z: finalZ,
-        scale: state.isHovered ? config.hoverScale : depthScale,
-        opacity: state.isHovered ? 1 : opacity,
         rotateY: (finalZ / config.radiusZ) * 15, // Slight rotation based on depth
         zIndex: Math.round(finalZ + 100),
       });
