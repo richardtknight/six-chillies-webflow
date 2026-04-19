@@ -73,42 +73,33 @@ export function initHero(navControl) {
     let startWidth, startTop, startLeft, textSlide;
 
     if (isDesktop) {
-      // Desktop: smaller video, lower position
       startWidth = 240;
-      startTop = 250;
+      startTop = vh * 0.28; // ~28% from top, adapts to viewport height
       startLeft = 300;
       textSlide = -500;
     } else if (isTablet) {
-      // Tablet: medium video, centered
       startWidth = 170;
-      startTop = 250;
+      startTop = vh * 0.28;
       startLeft = 240;
       textSlide = -400;
     } else if (isMobileLandscape) {
-      // Mobile Landscape: larger video
       startWidth = 225;
-      startTop = 215;
+      startTop = vh * 0.31;
       startLeft = 260;
       textSlide = -350;
     } else if (isMobilePortrait) {
-      // Mobile Portrait: largest relative size
       startWidth = 140;
-      startTop = 215;
+      startTop = vh * 0.31;
       startLeft = 170;
       textSlide = -300;
     } else {
-      // Fallback for any edge cases
       startWidth = 240;
-      startTop = 300;
+      startTop = vh * 0.28;
       startLeft = 250;
       textSlide = -350;
     }
 
     const startHeight = startWidth * (9 / 16); // Maintain 16:9 aspect ratio
-
-    // Position so right edge is at 50% of screen
-    //const startLeft = vw * 0.5 - startWidth; // Right edge at 50%
-    //const startTopCentered = startTop - startHeight / 2; // Center vertically at the calculated position
 
     // End dimensions and position (full screen)
     const endWidth = vw;
@@ -121,7 +112,6 @@ export function initHero(navControl) {
       startHeight,
       startLeft,
       startTop,
-      //startTop: startTopCentered,
       endWidth,
       endHeight,
       endLeft,
@@ -186,9 +176,15 @@ export function initHero(navControl) {
     .from('#heroActions', { opacity: 0, y: 12, duration: 0.6 }, '-=.5')
     .to(vf, { opacity: 1, duration: 0.6 }, '-=.3'); // Reduced offset so video appears after headline finishes
 
-  const ANIM_TRAVEL = window.innerHeight * 1.2;
-  const HOLD_TRAVEL = window.innerHeight * 0.9;
-  const TOTAL_TRAVEL = ANIM_TRAVEL + HOLD_TRAVEL;
+  let ANIM_TRAVEL = window.innerHeight * 1.2;
+  let HOLD_TRAVEL = window.innerHeight * 0.9;
+  let TOTAL_TRAVEL = ANIM_TRAVEL + HOLD_TRAVEL;
+
+  function recalculateTravelValues() {
+    ANIM_TRAVEL = window.innerHeight * 1.2;
+    HOLD_TRAVEL = window.innerHeight * 0.9;
+    TOTAL_TRAVEL = ANIM_TRAVEL + HOLD_TRAVEL;
+  }
 
   if (heroOuter) {
     heroOuter.style.height = `${window.innerHeight + TOTAL_TRAVEL}px`;
@@ -327,6 +323,9 @@ export function initHero(navControl) {
     });
 
     window.addEventListener('resize', () => {
+      // Recalculate travel distances for the new viewport height
+      recalculateTravelValues();
+
       // Recalculate responsive values on resize
       const newValues = getResponsiveValues();
       startWidth = newValues.startWidth;
