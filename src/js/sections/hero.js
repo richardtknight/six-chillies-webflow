@@ -36,7 +36,7 @@ export function initHero(navControl) {
   // new containing block that scopes position:fixed to that ancestor instead
   // of the viewport — causing the video to scroll with the page ("get left behind").
   // Appending to body ensures position:fixed is always relative to the viewport.
-  document.body.appendChild(vf);
+  document.body.prepend(vf);
 
   // Set video frame to fixed positioning for scroll animation
   vf.style.position = 'fixed';
@@ -45,6 +45,7 @@ export function initHero(navControl) {
   vf.style.padding = '0';
   vf.style.transform = 'none'; // Clear any inherited transforms
   vf.style.inset = 'auto'; // Reset any inset values
+  vf.style.pointerEvents = 'none'; // Let scroll/click events pass through to the page
 
   // Ensure video element inside fills the frame
   const video = vf.querySelector('video, .hero-video');
