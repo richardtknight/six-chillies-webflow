@@ -63,58 +63,51 @@ export function initHero(navControl) {
     const vh = window.innerHeight;
 
     // Webflow breakpoints
-    const isDesktop = vw > 991; // Desktop: 992px and above
-    const isTablet = vw <= 991 && vw > 767; // Tablet: 768px - 991px
-    const isMobileLandscape = vw <= 767 && vw > 479; // Mobile Landscape: 480px - 767px
-    const isMobilePortrait = vw <= 479; // Mobile Portrait: 479px and below
+    const isDesktop = vw > 991;
+    const isTablet = vw <= 991 && vw > 767;
+    const isMobileLandscape = vw <= 767 && vw > 479;
+    const isMobilePortrait = vw <= 479;
 
-    // Starting dimensions - scale based on Webflow breakpoints
     let startWidth, startTop, startLeft, textSlide;
 
     if (isDesktop) {
       startWidth = 240;
-      startTop = vh * 0.28; // ~28% from top, adapts to viewport height
-      startLeft = 300;
+      startTop = vh * 0.28;
+      startLeft = vw * 0.208; // ~300px at 1440px, scales with viewport width
       textSlide = -500;
     } else if (isTablet) {
       startWidth = 170;
       startTop = vh * 0.28;
-      startLeft = 240;
+      startLeft = vw * 0.234; // ~180px at 768px
       textSlide = -400;
     } else if (isMobileLandscape) {
       startWidth = 225;
       startTop = vh * 0.31;
-      startLeft = 260;
+      startLeft = vw * 0.34;
       textSlide = -350;
     } else if (isMobilePortrait) {
       startWidth = 140;
       startTop = vh * 0.31;
-      startLeft = 170;
+      startLeft = vw * 0.354;
       textSlide = -300;
     } else {
       startWidth = 240;
       startTop = vh * 0.28;
-      startLeft = 250;
+      startLeft = vw * 0.208;
       textSlide = -350;
     }
 
-    const startHeight = startWidth * (9 / 16); // Maintain 16:9 aspect ratio
-
-    // End dimensions and position (full screen)
-    const endWidth = vw;
-    const endHeight = vh;
-    const endLeft = 0;
-    const endTop = 0;
+    const startHeight = startWidth * (9 / 16);
 
     return {
       startWidth,
       startHeight,
       startLeft,
       startTop,
-      endWidth,
-      endHeight,
-      endLeft,
-      endTop,
+      endWidth: vw,
+      endHeight: vh,
+      endLeft: 0,
+      endTop: 0,
       textSlide,
     };
   }
@@ -143,7 +136,7 @@ export function initHero(navControl) {
     borderRadius: 6,
     boxShadow: '0 20px 50px rgba(0,0,0,.35)',
     opacity: 0,
-    zIndex: 0, // Start sandwiched between heading and span (span is z-index: 2)
+    zIndex: 0,
   });
 
   gsap.set('#headline .clip-inner, #headingOverlay .clip-inner', {
@@ -259,22 +252,11 @@ export function initHero(navControl) {
     // Initialize text position
     updateTextAnimations();
 
-    ScrollTrigger.create({
-      trigger: heroOuter,
-      start: 'top top',
-      end: () => `+=${TOTAL_TRAVEL}`,
-      scrub: 0.1,
-      onEnter() {
-        vf.style.willChange = 'transform, border-radius, box-shadow';
-      },
-      onLeave() {
-        vf.style.willChange = 'auto';
-      },
-      onUpdate(self) {
+    function buildOnUpdate() {
+      return function onUpdate(self) {
         const rawScrolled = self.progress * TOTAL_TRAVEL;
         const animProgress = Math.min(1, rawScrolled / ANIM_TRAVEL);
 
-        // Update nav lock state
         if (navControl) {
           if (animProgress >= 0.05 && navControl.navLocked) {
             navControl.setNavLocked(false);
@@ -286,26 +268,19 @@ export function initHero(navControl) {
         const p = animProgress;
         const ep = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
 
-        // Animate heroSticky margin-left from initial value to 0
         if (heroSticky) {
-          const marginLeft = gsap.utils.interpolate(initialHeroStickyMargin, 0, ep);
-          heroSticky.style.marginLeft = `${marginLeft}px`;
+          heroSticky.style.marginLeft = `${gsap.utils.interpolate(initialHeroStickyMargin, 0, ep)}px`;
         }
 
-        // Animate video frame (z-index now managed by updateTextAnimations)
-        // When fully expanded (ep >= 0.99), snap to exact final values to avoid gaps
         if (ep >= 0.99) {
           gsap.set(vf, {
-            width: '100vw',
-            height: '100vh',
-            left: '0px',
-            top: '0px',
+            width: endWidth,
+            height: endHeight,
+            left: 0,
+            top: 0,
             rotation: 0,
             borderRadius: 0,
             boxShadow: 'none',
-            x: 0,
-            y: 0,
-            transform: 'none', // Clear any GSAP transforms
           });
         } else {
           gsap.set(vf, {
@@ -318,30 +293,61 @@ export function initHero(navControl) {
             boxShadow: `0 ${gsap.utils.interpolate(20, 0, ep)}px ${gsap.utils.interpolate(50, 0, ep)}px rgba(0,0,0,${gsap.utils.interpolate(0.35, 0, ep)})`,
           });
         }
+      };
+    }
+
+    let heroTrigger = ScrollTrigger.create({
+      trigger: heroOuter,
+      start: 'top top',
+      end: () => `+=${TOTAL_TRAVEL}`,
+      scrub: true,
+      onEnter() {
+        vf.style.willChange = 'width, height, top, left, border-radius';
       },
+      onLeave() {
+        vf.style.willChange = 'auto';
+      },
+      onUpdate: buildOnUpdate(),
     });
 
+    let resizeTimer;
     window.addEventListener('resize', () => {
-      // Recalculate travel distances for the new viewport height
-      recalculateTravelValues();
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        recalculateTravelValues();
 
-      // Recalculate responsive values on resize
-      const newValues = getResponsiveValues();
-      startWidth = newValues.startWidth;
-      startHeight = newValues.startHeight;
-      startLeft = newValues.startLeft;
-      startTop = newValues.startTop;
-      endWidth = newValues.endWidth;
-      endHeight = newValues.endHeight;
-      endLeft = newValues.endLeft;
-      endTop = newValues.endTop;
-      textSlide = newValues.textSlide;
+        const newValues = getResponsiveValues();
+        startWidth = newValues.startWidth;
+        startHeight = newValues.startHeight;
+        startLeft = newValues.startLeft;
+        startTop = newValues.startTop;
+        endWidth = newValues.endWidth;
+        endHeight = newValues.endHeight;
+        endLeft = newValues.endLeft;
+        endTop = newValues.endTop;
+        textSlide = newValues.textSlide;
 
-      // Recalculate heroSticky margin
-      initialHeroStickyMargin = getHeroStickyMargin();
+        initialHeroStickyMargin = getHeroStickyMargin();
+        heroOuter.style.height = `${window.innerHeight + TOTAL_TRAVEL}px`;
 
-      heroOuter.style.height = `${window.innerHeight + TOTAL_TRAVEL}px`;
-      ScrollTrigger.refresh();
+        // Fully rebuild the trigger so it uses fresh values and recalculates positions
+        heroTrigger.kill();
+        heroTrigger = ScrollTrigger.create({
+          trigger: heroOuter,
+          start: 'top top',
+          end: () => `+=${TOTAL_TRAVEL}`,
+          scrub: true,
+          onEnter() {
+            vf.style.willChange = 'width, height, top, left, border-radius';
+          },
+          onLeave() {
+            vf.style.willChange = 'auto';
+          },
+          onUpdate: buildOnUpdate(),
+        });
+
+        ScrollTrigger.refresh();
+      }, 150);
     });
   }
 }
