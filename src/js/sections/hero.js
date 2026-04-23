@@ -80,7 +80,7 @@ export function initHero(navControl) {
 
     if (isDesktop) {
       startWidth = 240;
-      startTop = vh * 0.28;
+      startTop = vh * 0.37;
       startLeft = vw * 0.208; // ~300px at 1440px, scales with viewport width
       textSlide = -500;
     } else if (isTablet) {
