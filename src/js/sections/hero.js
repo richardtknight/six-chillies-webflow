@@ -1,8 +1,7 @@
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { init3DFloatingOrbit } from '../utils/animations';
 
-gsap.registerPlugin(ScrollTrigger);
+const gsap = window.gsap;
+const ScrollTrigger = window.ScrollTrigger;
 
 /**
  * Initializes hero section with scroll-based animations
