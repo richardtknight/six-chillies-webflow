@@ -330,6 +330,17 @@ export function initHero(navControl) {
         initialHeroStickyMargin = getHeroStickyMargin();
         heroOuter.style.height = `${window.innerHeight + TOTAL_TRAVEL}px`;
 
+        // Reset video to new starting position — onUpdate may not fire on refresh
+        // if scrollY is at/before the trigger boundary, leaving stale inline styles
+        gsap.set(vf, {
+          width: startWidth,
+          height: startHeight,
+          left: startLeft,
+          top: startTop,
+          rotation: -4,
+          borderRadius: 6,
+        });
+
         // Fully rebuild the trigger so it uses fresh values and recalculates positions
         heroTrigger.kill();
         heroTrigger = ScrollTrigger.create({
