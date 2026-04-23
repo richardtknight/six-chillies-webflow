@@ -31,6 +31,13 @@ export function initHero(navControl) {
 
   if (!vf) return;
 
+  // Move vf to document.body before applying fixed positioning.
+  // CSS transforms, filters, or will-change on ANY ancestor element create a
+  // new containing block that scopes position:fixed to that ancestor instead
+  // of the viewport — causing the video to scroll with the page ("get left behind").
+  // Appending to body ensures position:fixed is always relative to the viewport.
+  document.body.appendChild(vf);
+
   // Set video frame to fixed positioning for scroll animation
   vf.style.position = 'fixed';
   vf.style.overflow = 'hidden';
