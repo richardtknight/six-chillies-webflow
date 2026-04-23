@@ -304,19 +304,47 @@ export function initHero(navControl) {
       };
     }
 
-    let heroTrigger = ScrollTrigger.create({
-      trigger: heroOuter,
-      start: 'top top',
-      end: () => `+=${TOTAL_TRAVEL}`,
-      scrub: true,
-      onEnter() {
-        vf.style.willChange = 'width, height, top, left, border-radius';
-      },
-      onLeave() {
-        vf.style.willChange = 'auto';
-      },
-      onUpdate: buildOnUpdate(),
-    });
+    function buildTrigger() {
+      return ScrollTrigger.create({
+        trigger: heroOuter,
+        start: 'top top',
+        end: () => `+=${TOTAL_TRAVEL}`,
+        scrub: true,
+        onEnter() {
+          // Restore fixed positioning in case user scrolled back up from below
+          vf.style.position = 'fixed';
+          vf.style.willChange = 'width, height, top, left, border-radius';
+        },
+        onLeave(self) {
+          // Switch from fixed to absolute so the video sits at this point in the
+          // document and scrolls off naturally when the user continues past the hero.
+          // top = self.end ensures the video's top edge is at the viewport top
+          // at exactly the scroll position where the trigger ends.
+          gsap.set(vf, {
+            position: 'absolute',
+            top: self.end,
+            left: 0,
+            width: endWidth,
+            height: endHeight,
+            rotation: 0,
+            borderRadius: 0,
+            boxShadow: 'none',
+          });
+          vf.style.willChange = 'auto';
+        },
+        onEnterBack() {
+          // User scrolled back into the hero — restore fixed so the animation resumes
+          vf.style.position = 'fixed';
+          vf.style.willChange = 'width, height, top, left, border-radius';
+        },
+        onLeaveBack() {
+          vf.style.willChange = 'auto';
+        },
+        onUpdate: buildOnUpdate(),
+      });
+    }
+
+    let heroTrigger = buildTrigger();
 
     let resizeTimer;
     window.addEventListener('resize', () => {
@@ -338,9 +366,10 @@ export function initHero(navControl) {
         initialHeroStickyMargin = getHeroStickyMargin();
         heroOuter.style.height = `${window.innerHeight + TOTAL_TRAVEL}px`;
 
-        // Reset video to new starting position — onUpdate may not fire on refresh
+        // Reset video to starting position — onUpdate may not fire on refresh
         // if scrollY is at/before the trigger boundary, leaving stale inline styles
         gsap.set(vf, {
+          position: 'fixed',
           width: startWidth,
           height: startHeight,
           left: startLeft,
@@ -351,19 +380,7 @@ export function initHero(navControl) {
 
         // Fully rebuild the trigger so it uses fresh values and recalculates positions
         heroTrigger.kill();
-        heroTrigger = ScrollTrigger.create({
-          trigger: heroOuter,
-          start: 'top top',
-          end: () => `+=${TOTAL_TRAVEL}`,
-          scrub: true,
-          onEnter() {
-            vf.style.willChange = 'width, height, top, left, border-radius';
-          },
-          onLeave() {
-            vf.style.willChange = 'auto';
-          },
-          onUpdate: buildOnUpdate(),
-        });
+        heroTrigger = buildTrigger();
 
         ScrollTrigger.refresh();
       }, 150);
