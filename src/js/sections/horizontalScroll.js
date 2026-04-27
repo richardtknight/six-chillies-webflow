@@ -22,6 +22,7 @@ export function initHorizontalScroll() {
   const INTRO_FADE = VH * 0.4;
   const OUTRO_FADE = VH * 0.4;
   const OUTRO_HOLD = VH * 0.7;
+  const PEEK = 80; // px of first card visible at the right edge before scrolling starts
 
   if (horizDots) {
     CARDS.forEach((_, i) => {
@@ -33,7 +34,7 @@ export function initHorizontalScroll() {
   const dots = horizDots ? horizDots.querySelectorAll('.h-dot') : [];
 
   function getCardScrollDist() {
-    return window.innerWidth + (horizTrack ? horizTrack.scrollWidth : 0);
+    return window.innerWidth - PEEK + (horizTrack ? horizTrack.scrollWidth : 0);
   }
 
   function getPreOutroDist() {
@@ -83,7 +84,7 @@ export function initHorizontalScroll() {
 
       const cardProgress =
         scrolled <= b2 ? 0 : scrolled <= b3 ? (scrolled - b2) / cardScrollDist : 1;
-      const xStart = window.innerWidth;
+      const xStart = window.innerWidth - PEEK;
       const xEnd = -(horizTrack ? horizTrack.scrollWidth : 0);
       if (horizTrack)
         gsap.set(horizTrack, {

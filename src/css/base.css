@@ -306,8 +306,8 @@ body,
   height: var(--t-fade-size, 220px);
   background: linear-gradient(
     to bottom,
-    var(--bg, #09090a) 0%,
-    var(--bg, #09090a) 25%,
+    var(--bg, #111111) 0%,
+    var(--bg, #111111) 25%,
     transparent 100%
   );
 }
@@ -317,8 +317,8 @@ body,
   height: var(--t-fade-size, 220px);
   background: linear-gradient(
     to top,
-    var(--bg, #09090a) 0%,
-    var(--bg, #09090a) 25%,
+    var(--bg, #111111) 0%,
+    var(--bg, #111111) 25%,
     transparent 100%
   );
 }
