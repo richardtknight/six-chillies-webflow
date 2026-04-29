@@ -20,6 +20,8 @@ export function initLenis() {
       touchMultiplier: 2,
     });
 
+    window.lenis = lenis; // expose globally so other modules can call lenis.scrollTo()
+
     gsap.ticker.add((time) => {
       lenis.raf(time * 1000);
       ScrollTrigger.update();

@@ -27,6 +27,7 @@ import { initBlockTransition } from './sections/blockTransition';
 import { initTestimonials } from './sections/testimonials';
 import { initContentReveals } from './sections/contentReveals';
 import { initMarquee } from './sections/marquee';
+import { initStickyTimeline } from './sections/stickyTimeline';
 
 /**
  * Main application entry point
@@ -57,6 +58,7 @@ window.Webflow.push(() => {
     initTestimonials();
     initContentReveals();
     initMarquee();
+    initStickyTimeline();
 
     // Optional: Card Stack (call only if you have .card-stack elements)
     initCardStack('.card-stack', { swipeThreshold: 100 });

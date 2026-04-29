@@ -486,6 +486,114 @@ body,
   opacity: 0.5;
 }
 
+/* ─── Sticky Timeline ────────────────────────────────────────────────────── */
+
+.sticky-timeline {
+  display: flex;
+  align-items: flex-start; /* required for position:sticky to work in flex */
+  position: relative;
+}
+
+.st-left {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  width: 42%;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.st-panels {
+  flex: 1;
+  min-width: 0;
+}
+
+.st-panel {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+  box-sizing: border-box;
+}
+
+.st-image {
+  flex: 0 0 45%;
+  max-width: 45%;
+}
+
+.st-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.st-content {
+  flex: 1;
+  min-width: 0;
+}
+
+/* JS drives scaleY; position/colour set in Webflow */
+.st-progress-bar {
+  width: 100%;
+  height: 100%;
+  transform: scaleY(0);
+  transform-origin: top center;
+}
+
+.st-dots {
+  display: flex;
+  gap: 8px;
+}
+
+.st-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  padding: 0;
+  transition:
+    width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    border-radius 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    background 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.st-dot.active {
+  width: 24px;
+  border-radius: 3px;
+  background: currentColor;
+}
+
+@media (max-width: 767px) {
+  .sticky-timeline {
+    flex-direction: column;
+  }
+
+  .st-left {
+    position: relative;
+    width: 100%;
+    height: auto;
+  }
+
+  .st-panel {
+    height: auto;
+    min-height: 100svh;
+    flex-direction: column;
+  }
+
+  .st-image {
+    flex: 0 0 auto;
+    max-width: 100%;
+    width: 100%;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────── */
+
 .pause-indicator {
   position: absolute;
   bottom: 2rem;
